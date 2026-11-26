@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║   BLOG: Mr. Peabody & Sherman — Proyecto de alemán (en grupo)     ║
+  ╚══════════════════════════════════════════════════════════════════╝
+
+  GUÍA RÁPIDA — Lo único que tienes que editar está marcado con ✏️
+
+  1) NOMBRES DEL GRUPO Y AUTORES DE CADA TEXTO
+     Baja hasta el <script> (al final del archivo), "ZONA 1".
+
+  2) FOTOS (sin tocar código)
+     Sube las fotos a GitHub en el MISMO lugar que index.html,
+     con estos nombres exactos (sirve .jpg, .jpeg, .png o .webp):
+
+       poster ........................ póster de la película
+       paris, aegypten, florenz, troja  tarjetas de los destinos
+       peabody, sherman, penny ......... personajes principales
+       maria, agamenon, einstein ....... personajes secundarios
+       davinci ......................... el día especial con Da Vinci
+
+  3) MÁQUINA DEL TIEMPO (portada) — todo es OPCIONAL
+     Los escenarios ya vienen dibujados. Si quieren poner una imagen
+     propia de fondo en una época, súbanla con uno de estos nombres:
+       szene-labor, szene-aegypten, szene-troja, szene-florenz, szene-frankreich
+     Música por época (archivo .mp3), con estos nombres:
+       musik-labor, musik-aegypten, musik-troja, musik-florenz, musik-frankreich
+     Ejemplo: musik-aegypten.mp3   (suena al viajar a Egipto)
+
+  4) ANTES DE ENTREGAR
+     En la "ZONA 1" cambia   MODO_EDICION = true   por   false
+
+  DÓNDE ESTÁN LOS TEXTOS DEL GRUPO (ya están puestos, tal cual):
+     - Resumen ............. sección id="zusammenfassung"
+     - Reseña (opinión) .... sección id="rezension"
+     - Da Vinci ............ sección id="davinci"
+     - Personajes y rutinas  ZONA 2 del <script>
+     - Preguntas del quiz .. ZONA 3 del <script>
+-->
+<html lang="de" data-epoche="labor">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr. Peabody &amp; Sherman – Unser Filmblog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  /* ───────── PALETAS POR ÉPOCA (cambian con la máquina del tiempo) ───────── */
+  html[data-epoche="labor"]{--messing:#36C5C0;--messing-hell:#78A6B8;--nacht:#192A3A;--nacht2:#29465B;--papier:#EEF3F5;--papier2:#D9E6EA;--karte:#FAFCFD;--glow:#36C5C0}
+  html[data-epoche="aegypten"]{--messing:#D9B879;--messing-hell:#E9CBA8;--nacht:#5C3A2E;--nacht2:#8C5545;--papier:#F7EEE2;--papier2:#EBD5B8;--karte:#FFFAF2;--glow:#F2C46D}
+  html[data-epoche="troja"]{--messing:#A8B0B5;--messing-hell:#E7E3D8;--nacht:#192A3A;--nacht2:#426C83;--papier:#F1F0EB;--papier2:#DEDBD1;--karte:#FCFBF8;--glow:#9CC3D9}
+  html[data-epoche="florenz"]{--messing:#D9B879;--messing-hell:#FFF8EA;--nacht:#5E3326;--nacht2:#8A4A39;--papier:#FBF4E8;--papier2:#F0DFC4;--karte:#FFFCF6;--glow:#F0B27A}
+  html[data-epoche="frankreich"]{--messing:#D9B879;--messing-hell:#A9B7C6;--nacht:#192A3A;--nacht2:#3E4F3A;--papier:#F5F4EC;--papier2:#E2E7DA;--karte:#FFFDF7;--glow:#F3D98B}
+  :root{--tinte:#1d1b29;--rot:#d6453d;--tuerkis:#2f9e90;--sepia:#5b3b1a;--schatten:0 10px 30px rgba(20,24,52,.15)}
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'DM Sans',system-ui,sans-serif;background:var(--papier);color:var(--tinte);line-height:1.7;overflow-x:hidden;font-size:17px}
+  h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;line-height:1.15}
+  button{font:inherit;cursor:pointer;color:inherit}
+  img{max-width:100%;display:block}
+  ul{padding-left:1.2rem}
+
+  #fortschritt{position:fixed;top:0;left:0;height:4px;width:100%;transform:scaleX(0);transform-origin:0 50%;will-change:transform;background:linear-gradient(90deg,var(--messing),var(--rot));z-index:200}
+  .wechsel{animation:wechsel .45s ease}
+  @keyframes wechsel{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:none}}
+  .btn-messing{margin-top:1.3rem;background:var(--messing);color:var(--nacht);border:none;padding:.95rem 1.8rem;border-radius:999px;font-weight:700;font-size:1.05rem;transition:transform .2s}
+  .btn-messing:hover{transform:scale(1.05)}
+
+  /* ───────── PORTADA: MÁQUINA DEL TIEMPO ───────── */
+  .hero{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;color:#fff;background:#192A3A;isolation:isolate}
+  .szenen{position:absolute;inset:0;z-index:0}
+  .szene{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;transform-origin:50% 45%;transition:opacity .9s ease,filter .9s ease,transform 1.2s cubic-bezier(.2,.7,.2,1),visibility 0s linear 1s}
+  .szene.aktiv{opacity:1;visibility:visible;filter:none;transform:none;transition:opacity .9s ease-out,filter .9s ease,transform 1.2s cubic-bezier(.2,.7,.2,1),visibility 0s}
+  .szene.geht{opacity:0;visibility:visible;filter:blur(4px);transform:scale(1.05);transition:opacity 1s ease-in,filter .8s ease,transform 1.2s ease,visibility 0s}
+  .szene.kommt{opacity:0;visibility:visible;filter:brightness(1.5);transform:scale(1.04);transition:none}
+  .hero[data-zustand="reist"] .szene.aktiv,.szene.geht,.szene.kommt{will-change:opacity,transform}
+  .szene>svg{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:max(100%,min(177.8vh,250vw));width:max(100%,min(177.8svh,250vw));height:auto;aspect-ratio:16/9;display:block}
+  .szene-bild{position:absolute;inset:0;background-size:cover;background-position:center}
+  .schleier{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(rgba(8,14,22,.55),rgba(8,14,22,0) 30%,rgba(8,14,22,0) 56%,rgba(8,14,22,.62))}
+  .zm-partikel{position:absolute;inset:0;z-index:3;width:100%;height:100%;pointer-events:none}
+
+  .zm-inhalt{position:relative;z-index:5;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:.5rem;padding:3.4rem 1rem 1.1rem;text-align:center}
+  .zm-kopf{max-width:760px}
+  .hero-vorspann{text-transform:uppercase;letter-spacing:.3em;font-size:.78rem;color:var(--messing-hell);text-shadow:0 1px 8px rgba(0,0,0,.7);transition:color .8s ease}
+  .hero h1{font-size:clamp(2.1rem,6.4vw,4rem);font-weight:900;margin:.25rem 0;text-shadow:0 3px 18px rgba(0,0,0,.55)}
+  .hero h1 span{color:var(--messing);font-style:italic;transition:color .8s ease}
+  .hero-unter{font-size:1.05rem;text-shadow:0 2px 10px rgba(0,0,0,.7)}
+  .ton-btn{position:absolute;top:1rem;right:1rem;z-index:6;width:2.8rem;height:2.8rem;border-radius:50%;border:1px solid color-mix(in srgb,var(--messing) 55%,transparent);background:color-mix(in srgb,var(--nacht) 86%,transparent);font-size:1.15rem;transition:box-shadow .3s,background-color .8s,border-color .8s}
+  .ton-btn:hover{box-shadow:0 0 16px color-mix(in srgb,var(--messing) 70%,transparent)}
+
+  /* La máquina está hecha de capas: las piezas que giran se mueven sin redibujar el resto */
+  .maschine-buehne{position:relative;width:min(70vw,44vh,430px);width:min(70vw,44svh,430px);aspect-ratio:400/440;flex-shrink:0}
+  .maschine-buehne::before{content:"";position:absolute;left:10%;right:10%;bottom:-3%;height:9%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);z-index:-1}
+  .maschine{position:relative;width:100%;height:100%;transform-origin:50% 92%}
+  .m-ebene{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;display:block}
+  .m-dreh{will-change:transform}
+  .m-glow{position:absolute;left:50%;top:43.18%;width:112%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(.9);background:radial-gradient(closest-side,color-mix(in srgb,var(--glow) 70%,transparent),color-mix(in srgb,var(--glow) 25%,transparent) 55%,transparent);opacity:0;transition:opacity 1s ease,transform 1s ease;pointer-events:none}
+  .hero.an .m-glow{opacity:.6}
+  .hero[data-zustand="reist"] .m-glow{opacity:1;transform:translate(-50%,-50%) scale(1.12)}
+  .maschine.ruetteln{animation:ruetteln 1.1s ease-in-out}
+  .maschine.ruetteln-klein{animation:ruetteln-klein .6s ease-in-out}
+  @keyframes ruetteln{0%,100%{transform:none}8%{transform:translate(-3px,1px) rotate(-.7deg)}16%{transform:translate(3px,-2px) rotate(.8deg)}24%{transform:translate(-4px,2px) rotate(-1deg)}32%{transform:translate(4px,-1px) rotate(.9deg)}40%{transform:translate(-3px,2px) rotate(-.8deg)}50%{transform:translate(3px,-2px) rotate(.7deg)}60%{transform:translate(-2px,1px) rotate(-.5deg)}70%{transform:translate(2px,-1px) rotate(.4deg)}80%{transform:translate(-1px,1px) rotate(-.2deg)}90%{transform:translate(1px,0) rotate(.1deg)}}
+  @keyframes ruetteln-klein{0%,100%{transform:none}20%{transform:translate(-2px,1px) rotate(-.5deg)}40%{transform:translate(2px,-1px) rotate(.5deg)}60%{transform:translate(-1px,1px) rotate(-.3deg)}80%{transform:translate(1px,0) rotate(.2deg)}}
+  .welle{position:absolute;left:50%;top:43.2%;width:44%;aspect-ratio:1;border-radius:50%;border:3px solid color-mix(in srgb,var(--glow) 80%,#fff);box-shadow:0 0 24px var(--glow),inset 0 0 24px var(--glow);transform:translate(-50%,-50%) scale(.4);opacity:0;pointer-events:none;animation:welle 1.3s cubic-bezier(.2,.6,.3,1) forwards;z-index:2}
+  @keyframes welle{0%{opacity:.95;transform:translate(-50%,-50%) scale(.4)}100%{opacity:0;transform:translate(-50%,-50%) scale(5)}}
+
+  /* Partes de la máquina: apagada → encendida → viajando */
+  .m-birne{fill:#3A4655;stroke:transparent;stroke-width:8}
+  .hero.funken .m-birne{animation:birne 2.2s ease-in-out infinite}
+  .hero.funken .m-birne.b2{animation-delay:-1.1s}
+  @keyframes birne{0%,100%{fill:#3A4655;stroke:transparent}50%{fill:#FFD36E;stroke:rgba(255,211,110,.35)}}
+  .m-led{fill:#26323E}
+  .hero.funken .m-led{animation:led 1.8s ease-in-out infinite;animation-delay:calc(var(--i) * -.27s)}
+  .hero[data-zustand="reist"] .m-led{animation-duration:.45s}
+  @keyframes led{0%,100%{fill:#26323E}50%{fill:var(--c)}}
+  .m-lampe{fill:#334252;transition:fill .35s ease}
+  .m-lampe-halo{fill:#8FF5EE;opacity:0;transition:opacity .35s ease}
+  .hero.lampen .m-lampe{fill:#8FF5EE;transition-delay:calc(var(--i) * 85ms)}
+  .hero.lampen .m-lampe-halo{opacity:.35;transition-delay:calc(var(--i) * 85ms)}
+  .m-lampenglanz{opacity:0;transition:opacity .4s}
+  .hero[data-zustand="reist"] .m-lampenglanz{animation:glanz .45s ease-in-out infinite alternate}
+  @keyframes glanz{from{opacity:.1}to{opacity:.85}}
+  .m-glut{opacity:0;transition:opacity .9s ease}
+  .hero.energie .m-glut{opacity:.9;animation:glut 2.6s ease-in-out infinite}
+  .hero[data-zustand="reist"] .m-glut{opacity:1;animation-duration:.6s}
+  @keyframes glut{50%{transform:scale(1.06)}}
+  .m-wirbel{opacity:0;transition:opacity .9s}
+  .hero.energie .m-wirbel{opacity:.75}
+  .m-rohr{opacity:0;transition:opacity .6s}
+  .hero.energie .m-rohr{opacity:1;animation:fluss 1.4s linear infinite}
+  .hero[data-zustand="reist"] .m-rohr{animation-duration:.35s}
+  @keyframes fluss{to{stroke-dashoffset:-48}}
+  .m-jahr{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;font-weight:700;fill:#2B3D4B;letter-spacing:.5px;transition:fill .6s}
+  .hero.energie .m-jahr{fill:#8FF5EE}
+  .m-label{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:7px;fill:#4F6A7D;letter-spacing:1px}
+  .m-nadel{transform-box:fill-box;transform-origin:50% 100%;transform:rotate(-70deg);transition:transform 1.2s cubic-bezier(.3,1.6,.5,1)}
+  .hero.energie .m-nadel{transform:rotate(-12deg)}
+  .hero[data-zustand="reist"] .m-nadel{transform:rotate(62deg)}
+  .m-hebel{transform-box:fill-box;transform-origin:50% 100%;transform:rotate(-28deg);transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+  .hero[data-zustand="reist"] .m-hebel{transform:rotate(28deg)}
+
+  /* Controles de la portada (sin desenfoque de fondo: es muy pesado sobre partes animadas) */
+  .zm-unten{display:flex;flex-direction:column;align-items:center;gap:.5rem;width:100%}
+  .zm-status{min-height:1.5em;font-size:.95rem;font-weight:500;text-shadow:0 1px 8px rgba(0,0,0,.8)}
+  .zm-ort{display:inline-block;background:color-mix(in srgb,var(--nacht) 88%,transparent);border:1px solid color-mix(in srgb,var(--messing) 55%,transparent);border-radius:999px;padding:.28rem .95rem;font-size:.85rem;transition:background-color .8s,border-color .8s}
+  .zm-knoepfe{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;padding:.55rem;border-radius:20px;background:color-mix(in srgb,var(--nacht) 82%,transparent);border:1px solid color-mix(in srgb,var(--messing) 35%,transparent);max-width:min(780px,100%);transition:background-color .8s,border-color .8s}
+  .zm-knopf{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.6rem 1.05rem;border-radius:14px;border:2px solid color-mix(in srgb,var(--messing) 55%,transparent);background:rgba(255,255,255,.07);color:#fff;font-weight:700;font-size:1rem;transition:background-color .3s,border-color .3s,box-shadow .3s,transform .15s,opacity .3s,color .3s}
+  .zm-knopf:hover:not(:disabled){border-color:var(--messing);box-shadow:0 0 18px color-mix(in srgb,var(--messing) 65%,transparent),inset 0 0 12px color-mix(in srgb,var(--messing) 30%,transparent)}
+  .zm-knopf:active:not(:disabled){transform:scale(.95)}
+  .zm-knopf[aria-pressed="true"]{background:var(--messing);color:var(--nacht);border-color:var(--messing);box-shadow:0 0 22px color-mix(in srgb,var(--messing) 70%,transparent)}
+  .zm-knopf:disabled{cursor:wait;opacity:.55}
+  .zm-knopf[aria-pressed="true"]:disabled{opacity:1}
+  .zm-knopf:focus-visible{outline:3px solid #fff;outline-offset:2px}
+  .zm-knopf.stups{animation:stups .4s ease}
+  @keyframes stups{30%{transform:scale(1.08)}60%{transform:scale(.97)}}
+  .zm-hilfe{font-size:.75rem;background:#fff8e1;color:#7a5a17;border:1.5px dashed #e6a93a;border-radius:8px;padding:.25rem .6rem;max-width:92%}
+  .zm-weiter{color:#fff;opacity:.9;text-decoration:none;font-size:.88rem;text-shadow:0 1px 8px rgba(0,0,0,.8)}
+  .zm-weiter:hover{text-decoration:underline}
+  .zm-weiter span{display:inline-block;animation:huepfen 1.6s infinite}
+  @keyframes huepfen{50%{transform:translateY(5px)}}
+
+  /* Detalles animados de los escenarios: solo piezas pequeñas (las grandes obligaban a redibujar todo el fondo) */
+  .sz-fahne{transform-box:fill-box;transform-origin:0 50%;animation:fahne 1.6s ease-in-out infinite alternate}
+  .sz-fahne.f2{animation-delay:-.8s}
+  @keyframes fahne{to{transform:skewY(6deg) scaleX(.9)}}
+  .sz-strahl{transform-box:fill-box;transform-origin:50% 100%;animation:strahl 1.4s ease-in-out infinite alternate}
+  .sz-strahl.s2{animation-delay:-.7s}
+  @keyframes strahl{to{transform:scaleY(.86)}}
+  .lb-blase{animation:blase 3.2s ease-in infinite}
+  .lb-blase.b2{animation-delay:-1.1s}
+  .lb-blase.b3{animation-delay:-2.2s}
+  @keyframes blase{0%{transform:translateY(0);opacity:0}15%{opacity:.8}100%{transform:translateY(-130px);opacity:0}}
+  .lb-funke{animation:funke 1.3s steps(2) infinite}
+  @keyframes funke{0%,100%{opacity:.2}50%{opacity:1}}
+  .lb-blink{animation:lbblink 1.6s ease-in-out infinite}
+  @keyframes lbblink{50%{opacity:.25}}
+  .lb-plattform-glow{opacity:.25;transition:opacity 1s}
+  .hero.an .lb-plattform-glow{opacity:1}
+  .szene:not(.aktiv):not(.geht) *,.hero.pausiert *,.hero[data-zustand="reist"] .szene *{animation-play-state:paused!important}
+
+  /* ───────── NAVEGACIÓN ───────── */
+  .zeitnav{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--nacht) 97%,transparent)}
+  .zeitnav ul{list-style:none;display:flex;gap:.4rem;overflow-x:auto;padding:.7rem 1rem;max-width:1100px;margin:0 auto;scrollbar-width:none}
+  .zeitnav ul::-webkit-scrollbar{display:none}
+  .zeitnav a{display:flex;align-items:center;gap:.45rem;white-space:nowrap;color:var(--papier);text-decoration:none;font-size:.92rem;padding:.4rem .85rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--messing) 35%,transparent);transition:background .25s,color .25s,border-color .25s}
+  .zeitnav a .nr{display:inline-grid;place-items:center;width:1.4rem;height:1.4rem;border-radius:50%;background:color-mix(in srgb,var(--messing) 22%,transparent);font-size:.75rem;font-weight:700}
+  .zeitnav a.aktiv,.zeitnav a:hover{background:var(--messing);color:var(--nacht);border-color:var(--messing)}
+  .zeitnav a.aktiv .nr{background:var(--nacht);color:var(--messing)}
+
+  /* ───────── SECCIONES ───────── */
+  main{max-width:1040px;margin:0 auto;padding:0 1.25rem}
+  .station{padding:5rem 0 1rem;scroll-margin-top:3.5rem}
+  .station-kopf{margin-bottom:1.6rem}
+  .station-nr{display:inline-block;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rot);font-weight:700}
+  .station h2{font-size:clamp(2rem,6vw,3.2rem);margin:.2rem 0 .4rem}
+  .intro{opacity:.8;max-width:660px}
+  .vokabel-tipp{display:inline-block;font-size:.88rem;margin-top:.7rem;background:rgba(47,158,144,.1);border-radius:10px;padding:.45rem .8rem}
+  .lesezeit{display:inline-block;margin-top:.6rem;font-size:.85rem;background:var(--papier2);padding:.2rem .7rem;border-radius:999px}
+  .unterkopf{margin:2.8rem 0 1.2rem}
+  .unterkopf h3{font-size:clamp(1.5rem,4.5vw,2.1rem)}
+  .unterkopf p{opacity:.75;margin-top:.25rem}
+  .karte{background:var(--karte);border-radius:20px;padding:clamp(1.3rem,4vw,2.4rem);box-shadow:var(--schatten);border:1px solid var(--papier2);position:relative}
+  .text p{margin-bottom:1rem}
+  .text p:last-child{margin-bottom:0}
+
+  .einklappbar{max-height:15rem;overflow:hidden;position:relative}
+  .einklappbar.kurz{max-height:9.5rem}
+  .einklappbar.lang::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4.5rem;background:linear-gradient(transparent,var(--karte));pointer-events:none}
+  .einklappbar.offen{max-height:none}
+  .einklappbar.offen::after{display:none}
+  .mehr-btn{display:none;margin-top:.9rem;background:none;border:2px solid var(--tinte);padding:.45rem 1.15rem;border-radius:999px;font-weight:700;font-size:.92rem}
+  .mehr-btn.sichtbar{display:inline-block}
+  .mehr-btn:hover{background:var(--tinte);color:var(--papier)}
+
+  .autor{margin-top:1rem;font-size:.88rem;font-style:italic;opacity:.85}
+  .autor strong{font-style:normal}
+  .autor-leer strong{border:1.5px dashed #e6a93a;padding:.05rem .45rem;border-radius:6px;color:#7a5a17;background:rgba(230,169,58,.1)}
+
+  /* ───────── FOTOS ───────── */
+  .foto{position:relative;overflow:hidden}
+  .foto img{width:100%;height:100%;object-fit:cover}
+  .foto.frei{border-radius:16px;background:var(--papier2)}
+  .foto-leer{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.1rem;border:2px dashed #e6a93a;border-radius:inherit;color:#7a5a17;font-size:.8rem;padding:.7rem;background:rgba(230,169,58,.1);line-height:1.3}
+  .foto-leer span{font-size:1.7rem}
+  .foto-leer b{font-family:ui-monospace,monospace;font-size:.92rem;background:#fff;padding:.1rem .45rem;border-radius:5px;margin-top:.25rem}
+  .foto-tipp{display:inline-block;margin-top:.45rem;font-size:.72rem;font-family:ui-monospace,monospace;background:rgba(230,169,58,.15);border:1px dashed #e6a93a;color:#7a5a17;padding:.1rem .45rem;border-radius:6px}
+  .portrait{width:140px;height:140px;border-radius:50%;margin:0 auto;display:grid;place-items:center;background:var(--farbe,#888);border:5px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.18);flex-shrink:0}
+  .portrait .initial{font-family:'Fraunces',serif;font-size:3.4rem;font-weight:900;color:#fff;line-height:1}
+  .portrait.mittel{width:96px;height:96px}
+  .portrait.mittel .initial{font-size:2.4rem}
+  .portrait.klein{width:112px;height:112px}
+  .portrait.klein .initial{font-size:2.7rem}
+  .portrait.mini{width:54px;height:54px;border-width:3px}
+  .portrait.mini .initial{font-size:1.4rem}
+
+  /* ───────── RESUMEN ───────── */
+  .fakten{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin-bottom:1.4rem}
+  .fakt{background:var(--nacht);color:var(--papier);border-radius:16px;padding:.9rem 1rem;text-align:center;transition:transform .3s}
+  .fakt:hover{transform:rotate(-2deg) scale(1.04)}
+  .fakt .wert{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:700;color:var(--messing);display:block;line-height:1.2}
+  .fakt .etikett{font-size:.76rem;text-transform:uppercase;letter-spacing:.12em;opacity:.75}
+  .mit-bild{display:flex;flex-wrap:wrap;gap:1.6rem;align-items:flex-start}
+  .mit-bild .poster{flex:0 0 190px;aspect-ratio:2/3;margin:0 auto;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+  .mit-bild .text-spalte{flex:1 1 320px;min-width:0}
+
+  .reiseziele{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;align-items:start}
+  .ziel{background:var(--nacht);color:var(--papier);border-radius:16px;overflow:hidden;transition:transform .3s,box-shadow .3s}
+  .ziel:hover{transform:translateY(-3px);box-shadow:0 12px 25px rgba(20,24,52,.3)}
+  .ziel.offen{background:var(--nacht2)}
+  .ziel-kopf{display:block;width:100%;background:none;border:none;text-align:left;padding:1.1rem 1.2rem;position:relative;color:var(--papier)}
+  .ziel .emoji{font-size:2rem;display:block}
+  .ziel .ort{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;display:block;margin-top:.2rem}
+  .ziel .zeit{font-size:.82rem;color:var(--messing-hell)}
+  .ziel .pfeil{position:absolute;top:1.1rem;right:1.1rem;transition:transform .3s;color:var(--messing)}
+  .ziel.offen .pfeil{transform:rotate(180deg)}
+  .ziel-text{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
+  .ziel.offen .ziel-text{grid-template-rows:1fr}
+  .ziel-text>div{overflow:hidden;min-height:0}
+  .ziel-text .innen{padding:0 1.2rem 1.2rem;font-size:.95rem}
+  .ziel-text .foto{aspect-ratio:16/9;margin-bottom:.8rem;border-radius:12px}
+  .ziel-link{display:inline-block;margin-top:.6rem;color:var(--messing);font-weight:700;text-decoration:none}
+  .ziel-link:hover{text-decoration:underline}
+
+  /* ───────── RESEÑA ───────── */
+  .bewertung-kopf{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;margin-bottom:.9rem}
+  .sterne-anzeige{font-size:2rem;letter-spacing:.1rem;line-height:1}
+  .sterne-anzeige span{display:inline-block;transform:scale(0);transition:transform .4s cubic-bezier(.3,1.8,.5,1);background:linear-gradient(90deg,var(--messing) var(--fuell,0%),#d8ccb0 var(--fuell,0%));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sterne-anzeige.los span{transform:scale(1)}
+  .bewertung-zahl{font-family:'Fraunces',serif;font-weight:700;font-size:1.3rem}
+  .empfehlung{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.4rem}
+  .empfehlung span{background:var(--papier2);padding:.3rem .85rem;border-radius:999px;font-size:.88rem}
+  .wichtig{margin-top:1.8rem;padding-top:1.4rem;border-top:1px dashed #d8ccb0}
+  .wichtig h3{font-size:1.3rem;margin-bottom:.9rem}
+  .pro-contra{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+  .pc{border-radius:16px;padding:1.1rem 1.3rem}
+  .pc h4{font-size:1.1rem;margin-bottom:.5rem;font-family:'DM Sans',sans-serif}
+  .pc li{margin-bottom:.35rem;font-size:.95rem}
+  .pc.pro{background:rgba(47,158,144,.12);border-left:5px solid var(--tuerkis)}
+  .pc.contra{background:rgba(214,69,61,.1);border-left:5px solid var(--rot)}
+  .botschaft{margin-top:1.6rem;background:var(--rot);color:#fff;border-radius:22px;padding:2.2rem 1.6rem 1.7rem;position:relative;box-shadow:var(--schatten);overflow:hidden}
+  .botschaft::before{content:"“";position:absolute;top:-1.2rem;left:.8rem;font-family:'Fraunces',serif;font-size:8rem;line-height:1;opacity:.25}
+  .botschaft-label{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;opacity:.9;position:relative}
+  .botschaft p{position:relative;font-family:'Fraunces',serif;font-size:clamp(1.25rem,3.6vw,1.75rem);font-style:italic;line-height:1.35;margin-top:.4rem}
+  .du-bewertest{margin-top:1.6rem;text-align:center;background:var(--nacht);color:var(--papier);border-radius:20px;padding:1.6rem}
+  .du-bewertest h3{color:var(--messing);margin-bottom:.6rem}
+  .klick-sterne{display:flex;justify-content:center;gap:.3rem}
+  .klick-sterne button{background:none;border:none;font-size:2.4rem;color:color-mix(in srgb,var(--messing-hell) 35%,transparent);transition:transform .2s,color .2s}
+  .klick-sterne button.an{color:var(--messing);transform:scale(1.15)}
+  #bewertung-nachricht{min-height:1.7rem;margin-top:.5rem}
+
+  /* ───────── PERSONAJES ───────── */
+  .hauptfiguren{display:grid;gap:1.4rem}
+  .hauptfigur{display:grid;grid-template-columns:190px 1fr;gap:1.6rem;background:var(--karte);border-radius:22px;padding:clamp(1.2rem,3.5vw,2rem);box-shadow:var(--schatten);border:1px solid var(--papier2);border-top:7px solid var(--farbe)}
+  .hf-bild{text-align:center}
+  .hf-rolle{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--farbe);font-weight:700}
+  .hf-name{font-size:clamp(1.8rem,4.5vw,2.3rem);margin:.15rem 0 .8rem}
+  .ausweis{display:grid;grid-template-columns:max-content 1fr;gap:.3rem .9rem;background:var(--papier2);border-radius:14px;padding:.8rem 1rem;font-size:.9rem;margin-bottom:1rem}
+  .ausweis dt{opacity:.75}
+  .ausweis dd{font-weight:700}
+  .mag-box{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:1.1rem;padding-top:1rem;border-top:1px dashed #d8ccb0}
+  .mag-frage{font-weight:700;margin-right:.3rem}
+  .mag-btn{border:2px solid var(--tinte);background:none;border-radius:999px;padding:.3rem .9rem;font-weight:700;font-size:.9rem}
+  .mag-btn.gewaehlt{background:var(--tinte);color:var(--papier)}
+  .mag-antwort{flex-basis:100%;min-height:1.5rem;font-size:.95rem}
+
+  .nebenfiguren{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;align-items:stretch}
+  .flip{perspective:1400px;cursor:pointer;outline:none}
+  .flip:focus-visible .flip-seite{outline:3px solid var(--messing);outline-offset:3px}
+  .flip-innen{display:grid;height:100%;transition:transform .75s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+  .flip.gedreht .flip-innen{transform:rotateY(180deg)}
+  .flip-seite{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;padding:1.4rem;box-shadow:var(--schatten);display:flex;flex-direction:column}
+  .flip-vorne{background:var(--karte);border:1px solid var(--papier2);border-top:7px solid var(--farbe);text-align:center;align-items:center}
+  .flip-hinten{background:var(--nacht);color:var(--papier);transform:rotateY(180deg)}
+  .flip h4{font-size:1.5rem;margin-top:.8rem}
+  .nf-rolle{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--farbe);font-weight:700;margin-bottom:.8rem}
+  .flip-vorne .ausweis{width:100%;text-align:left;margin-bottom:.4rem}
+  .flip-hinweis{margin-top:auto;padding-top:.8rem;font-size:.82rem;opacity:.65}
+  .flip-hinten h4{color:var(--messing);margin:0 0 .6rem}
+  .flip-hinten .text{font-size:.95rem}
+  .flip-hinten .autor-leer strong{color:#f5d48a}
+
+  /* ───────── RUTINAS ───────── */
+  .routinen{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.2rem}
+  .routine{background:var(--karte);border:1px solid var(--papier2);border-bottom:7px solid var(--farbe);border-radius:22px;padding:1.4rem;text-align:center;box-shadow:var(--schatten);cursor:pointer;transition:transform .25s}
+  .routine:hover{transform:translateY(-4px)}
+  .routine h4{font-size:1.4rem;margin-top:.7rem}
+  .r-zeit{font-size:.9rem;opacity:.75;margin:.2rem 0 .9rem}
+  .tagesbalken{position:relative;height:10px;border-radius:99px;background:linear-gradient(90deg,#232a5c 0%,#ffad7a 10%,#7ec8e3 25%,#c8ecfb 55%,#f2865b 78%,#232a5c 92%);margin:0 .5rem 1.1rem}
+  .tagesbalken .punkt{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--farbe);transform:translate(-50%,-50%)}
+  .los-btn{background:var(--tinte);color:var(--papier);border:none;padding:.55rem 1.1rem;border-radius:999px;font-weight:700;font-size:.9rem}
+  .routine:hover .los-btn{background:var(--farbe)}
+
+  .himmel{position:relative;overflow:hidden;transition:background 1s ease}
+  .himmelskoerper{position:absolute;font-size:2.5rem;transform:translate(-50%,-50%);transition:left 1s ease,top 1s ease;line-height:1}
+  .horizont{position:absolute;bottom:0;left:0;right:0;height:34px;background:rgba(20,24,52,.35);border-radius:50% 50% 0 0/100% 100% 0 0}
+  .uhrzeit{position:absolute;left:1.2rem;top:.6rem;font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.4)}
+  .bis{position:absolute;left:1.3rem;top:3.5rem;color:#fff;font-size:.9rem;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+
+  .vergleich{background:var(--karte);border-radius:24px;overflow:hidden;box-shadow:var(--schatten);border:1px solid var(--papier2)}
+  .vergleich .himmel{height:150px}
+  .v-steuerung{padding:1.1rem 1.3rem .2rem}
+  .v-zeile{display:flex;gap:.8rem;align-items:center}
+  .v-zeile input{flex:1;accent-color:var(--messing);height:1.6rem}
+  .v-skala{display:flex;justify-content:space-between;font-size:.75rem;opacity:.65;margin-right:7.5rem}
+  .v-spalten{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;padding:1rem 1.2rem 1.4rem}
+  .v-spalte{background:var(--papier2);border:none;border-top:5px solid var(--farbe);border-radius:16px;padding:.9rem .5rem;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.1rem;transition:transform .2s}
+  .v-spalte:hover{transform:translateY(-3px)}
+  .v-spalte strong{font-size:.88rem;margin-top:.35rem;line-height:1.2}
+  .v-icon{font-size:2rem;line-height:1.25;margin-top:.2rem}
+  .v-kurz{font-size:.85rem;line-height:1.3;min-height:2.6em}
+  .v-seit{font-size:.72rem;opacity:.65}
+
+  .btn-klein{background:var(--messing);color:var(--nacht);border:none;border-radius:999px;padding:.55rem 1.1rem;font-weight:700;font-size:.92rem;white-space:nowrap}
+  .btn-klein:disabled{opacity:.4;cursor:default}
+
+  /* Día especial: cuaderno de Da Vinci */
+  .skizzenbuch{margin-top:2.8rem;background:#f3e4c0;background-image:repeating-linear-gradient(transparent 0 31px,rgba(91,59,26,.1) 31px 32px);border-radius:8px 24px 24px 8px;padding:clamp(1.4rem,4vw,2.4rem);color:var(--sepia);box-shadow:var(--schatten),inset 14px 0 0 rgba(91,59,26,.12);position:relative;scroll-margin-top:4.5rem;overflow:hidden}
+  .sb-label{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700}
+  .sb-titel{font-family:'Caveat',cursive;font-size:clamp(2.5rem,7vw,3.5rem);line-height:1;margin-top:.4rem}
+  .sb-unter{font-family:'Caveat',cursive;font-size:1.7rem;line-height:1.1}
+  .signatur{position:absolute;top:1rem;right:1.3rem;font-family:'Caveat',cursive;font-size:2.1rem;transform:scaleX(-1) rotate(-6deg);opacity:.45;pointer-events:none}
+  .sb-info{margin:.9rem 0 1.3rem;font-size:.95rem;max-width:620px}
+  .sb-inhalt{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-start}
+  .sb-bild{flex:0 0 210px;aspect-ratio:4/5;margin:0 auto;border:6px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.2);transform:rotate(-2deg);border-radius:4px}
+  .sb-text-rahmen{flex:1 1 300px;min-width:0}
+  .sb-text{font-family:'Fraunces',serif;font-size:1.05rem;line-height:1.8;transition:transform .9s cubic-bezier(.4,.2,.2,1)}
+  .sb-text.gespiegelt{transform:scaleX(-1)}
+  .sb-steuerung{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem;margin-top:1.3rem}
+  .sb-btn{background:var(--sepia);color:#f3e4c0;border:none;padding:.7rem 1.3rem;border-radius:999px;font-weight:700}
+  .sb-hinweis{font-family:'Caveat',cursive;font-size:1.35rem}
+  .skizzenbuch .autor-leer strong{background:rgba(255,255,255,.4)}
+
+  /* ───────── QUIZ ───────── */
+  .quiz-box{background:var(--nacht);color:var(--papier);border-radius:22px;padding:clamp(1.4rem,4vw,2.4rem);box-shadow:var(--schatten)}
+  .quiz-fortschritt{height:6px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;margin-bottom:1.2rem}
+  .quiz-fortschritt div{height:100%;background:var(--messing);transition:width .4s}
+  .quiz-zaehler{display:flex;justify-content:space-between;gap:1rem;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--messing-hell)}
+  .quiz-frage{font-family:'Fraunces',serif;font-size:clamp(1.3rem,4vw,1.8rem);margin:.4rem 0 1.2rem}
+  .antworten{display:grid;gap:.7rem}
+  .antwort{text-align:left;background:rgba(255,255,255,.07);color:var(--papier);border:2px solid rgba(255,255,255,.15);border-radius:14px;padding:.85rem 1.1rem;transition:.2s}
+  .antwort:hover:not(:disabled){border-color:var(--messing);background:color-mix(in srgb,var(--messing) 14%,transparent)}
+  .antwort:disabled{cursor:default}
+  .antwort.richtig{background:var(--tuerkis);border-color:var(--tuerkis)}
+  .antwort.falsch{background:var(--rot);border-color:var(--rot);animation:wackeln .4s}
+  @keyframes wackeln{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .erklaerung{margin-top:1rem;padding:.9rem 1.1rem;border-radius:12px;background:rgba(255,255,255,.08);display:none}
+  .erklaerung.sichtbar{display:block;animation:wechsel .4s}
+  .ergebnis{text-align:center}
+  .ergebnis .punkte{font-family:'Fraunces',serif;font-size:4rem;font-weight:900;color:var(--messing)}
+  .ergebnis .rekord{font-size:.9rem;opacity:.75;margin-top:.3rem}
+
+  /* ───────── JUEGOS ───────── */
+  .spiele-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.4rem;align-items:start}
+  .spiel{border-radius:22px;padding:clamp(1.3rem,4vw,2rem);box-shadow:var(--schatten)}
+  .spiel-dunkel{background:var(--nacht);color:var(--papier)}
+  .spiel-hell{background:var(--karte);border:1px solid var(--papier2)}
+  .spiel h3{font-size:1.6rem}
+  .anleitung{font-size:.92rem;opacity:.8;margin:.3rem 0 1rem}
+  .punkte-leiste{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem;font-size:.85rem;margin-bottom:.9rem;font-weight:700}
+  .spiel-dunkel .punkte-leiste{color:var(--messing-hell)}
+  .tipps{list-style:none;padding:0;display:grid;gap:.5rem;margin-bottom:1rem}
+  .tipps li{background:rgba(255,255,255,.08);border-left:4px solid var(--messing);padding:.55rem .8rem;border-radius:8px;animation:wechsel .4s}
+  .namen{display:flex;flex-wrap:wrap;gap:.45rem}
+  .name-btn{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);color:var(--papier);border-radius:999px;padding:.4rem .85rem;font-size:.9rem;transition:.2s}
+  .name-btn:hover:not(:disabled){border-color:var(--messing)}
+  .name-btn:disabled{cursor:default}
+  .name-btn.richtig{background:var(--tuerkis);border-color:var(--tuerkis)}
+  .name-btn.falsch{background:var(--rot);border-color:var(--rot);opacity:.75}
+  .wbi-ergebnis{display:flex;align-items:center;gap:.8rem;min-height:1.6rem;margin-top:1rem;font-weight:700}
+  .wbi-ergebnis:empty{display:none}
+  .wbi-aktionen{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+  .ordnung-liste{display:grid;gap:.55rem}
+  .o-karte{display:flex;align-items:center;gap:.75rem;text-align:left;background:var(--papier2);border:2px solid transparent;border-radius:14px;padding:.65rem .9rem;font-size:.95rem;transition:background .2s,border-color .2s}
+  .o-karte .o-nr{flex:0 0 1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;background:#fff;font-weight:700;font-size:.85rem;color:#b8a888}
+  .o-karte:hover:not(:disabled){border-color:var(--messing)}
+  .o-karte:disabled{cursor:default}
+  .o-karte.fertig{background:rgba(47,158,144,.14);border-color:var(--tuerkis)}
+  .o-karte.fertig .o-nr{background:var(--tuerkis);color:#fff}
+  .o-karte.falsch{border-color:var(--rot);animation:wackeln .4s}
+  .o-ende{margin-top:1rem;text-align:center}
+  .o-ende p{font-weight:700;margin-bottom:.6rem}
+
+  /* ───────── EQUIPO (solo nombres) ───────── */
+  .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem}
+  .mitglied{background:var(--karte);border:1px solid var(--papier2);border-radius:22px;padding:1.4rem;text-align:center;box-shadow:var(--schatten);border-top:7px solid var(--farbe)}
+  .mitglied h4{font-size:1.35rem}
+  .mitglied h4.leer{border:1.5px dashed #e6a93a;border-radius:8px;display:inline-block;padding:.1rem .5rem;color:#7a5a17;font-size:1.05rem}
+  .mitglied .texte{font-size:.85rem;opacity:.8;margin-top:.5rem}
+
+  /* Ventana de la rutina */
+  .modal{position:fixed;inset:0;z-index:300;background:rgba(10,12,30,.75);display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:.3s}
+  .modal.offen{opacity:1;visibility:visible}
+  .modal-box{background:var(--karte);width:min(580px,100%);max-height:92vh;overflow:auto;border-radius:24px;position:relative;transform:translateY(30px) scale(.96);transition:.35s}
+  .modal.offen .modal-box{transform:none}
+  .modal-zu{position:absolute;top:.8rem;right:.8rem;z-index:3;width:2.4rem;height:2.4rem;border-radius:50%;border:none;background:rgba(255,255,255,.85);font-size:1.1rem}
+  .modal .himmel{height:190px;border-radius:24px 24px 0 0}
+  .modal-text{padding:1.3rem 1.6rem 1.8rem}
+  .modal-rolle{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rot);font-weight:700}
+  .modal-text h3{font-size:1.8rem;margin:.15rem 0 .9rem}
+  .schritt-titel{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;margin-bottom:.3rem}
+  .aktivitaet{min-height:6rem;font-size:1.05rem}
+  #tag-regler{width:100%;margin-top:1rem;accent-color:var(--messing);height:1.6rem}
+  .zeit-chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.4rem}
+  .zeit-chip{border:1.5px solid #d8ccb0;background:none;border-radius:999px;padding:.12rem .55rem;font-size:.78rem}
+  .zeit-chip.aktiv{background:var(--messing);border-color:var(--messing);font-weight:700}
+  .modal-steuerung{display:flex;gap:.6rem;justify-content:center;margin-top:1.1rem}
+  .modal-steuerung button{border:2px solid var(--tinte);background:none;border-radius:999px;padding:.5rem 1rem;font-weight:700}
+  .modal-steuerung button:hover,.modal-steuerung button.laeuft{background:var(--tinte);color:var(--papier)}
+  .notiz{margin-top:1.3rem;background:rgba(214,69,61,.08);border-left:4px solid var(--rot);padding:.8rem 1rem;border-radius:10px;font-size:.95rem}
+  .volltext-btn{margin-top:1rem;background:none;border:none;color:var(--rot);font-weight:700;padding:0}
+  .volltext{display:none;margin-top:.7rem;font-size:.95rem;background:var(--papier2);padding:1rem 1.1rem;border-radius:12px}
+  .volltext.offen{display:block}
+
+  /* Vocabulario con traducción */
+  .vokabel{border-bottom:2px dotted var(--tuerkis);cursor:help;position:relative;white-space:nowrap}
+  .vokabel::after{content:"🇪🇸 " attr(data-es);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(5px);background:var(--tuerkis);color:#fff;font-size:.8rem;font-style:normal;font-weight:500;padding:.3rem .6rem;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s;z-index:10;font-family:'DM Sans',sans-serif;letter-spacing:0;text-transform:none;line-height:1.3;text-shadow:none}
+  .vokabel:hover::after,.vokabel.zeigen::after{opacity:1;transform:translateX(-50%)}
+
+  /* Botón de salto temporal y efecto */
+  #zeitsprung{position:fixed;right:1.1rem;bottom:1.1rem;z-index:150;width:3.6rem;height:3.6rem;border-radius:50%;border:none;background:var(--rot);color:#fff;font-size:1.6rem;box-shadow:0 8px 20px rgba(214,69,61,.45);transition:transform .3s}
+  #zeitsprung:hover{transform:rotate(-30deg) scale(1.08)}
+  #zeitsprung .tipp{position:absolute;right:110%;top:50%;transform:translateY(-50%);background:var(--tinte);color:#fff;font-size:.78rem;padding:.3rem .6rem;border-radius:8px;white-space:nowrap;opacity:0;transition:.2s;pointer-events:none}
+  #zeitsprung:hover .tipp{opacity:1}
+  .warp{position:fixed;inset:0;z-index:400;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.95),color-mix(in srgb,var(--messing) 70%,transparent) 30%,color-mix(in srgb,var(--nacht) 90%,transparent) 70%);opacity:0}
+  .warp.los{animation:warp .9s ease}
+  @keyframes warp{0%{opacity:0;transform:scale(.2) rotate(0)}40%{opacity:1;transform:scale(1.4) rotate(90deg)}100%{opacity:0;transform:scale(2.5) rotate(180deg)}}
+  #konfetti{position:fixed;inset:0;pointer-events:none;z-index:350}
+
+  /* Aviso del modo edición (solo mientras MODO_EDICION = true) */
+  #edit-badge{position:fixed;left:.8rem;bottom:.8rem;z-index:150;background:#fff8e1;border:2px dashed #e6a93a;color:#7a5a17;font-size:.72rem;padding:.4rem 1.7rem .4rem .65rem;border-radius:10px;max-width:205px;line-height:1.35;box-shadow:var(--schatten)}
+  #edit-badge button{position:absolute;top:.25rem;right:.35rem;background:none;border:none;font-size:.9rem}
+
+  footer{background:var(--nacht);color:var(--papier);text-align:center;padding:3rem 1.25rem 5.5rem;margin-top:4rem}
+  footer h3{color:var(--messing);font-size:1.5rem;margin-bottom:.4rem}
+  footer .klein{opacity:.65;font-size:.85rem;margin-top:1rem}
+  .zurueck-btn{margin-top:1.2rem;background:none;border:2px solid var(--messing);color:var(--messing);padding:.6rem 1.3rem;border-radius:999px;font-weight:700}
+  .zurueck-btn:hover{background:var(--messing);color:var(--nacht)}
+
+  .zeige{opacity:0;transform:translateY(35px);transition:opacity .8s ease,transform .8s ease}
+  .zeige.da{opacity:1;transform:none}
+
+  @media (max-width:640px){
+    body{font-size:16px}
+    .hauptfigur{grid-template-columns:1fr;gap:1rem}
+    .v-spalten{gap:.45rem;padding:1rem .8rem 1.3rem}
+    .v-spalte{padding:.8rem .3rem}
+    .v-kurz{font-size:.78rem}
+    .signatur{display:none}
+  }
+  @media (max-width:560px){
+    .zm-knopf{flex:1 1 calc(33% - .5rem);padding:.55rem .45rem;font-size:.92rem}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+    .zeige{opacity:1;transform:none}
+    .szene,.szene.aktiv{transition:opacity .5s ease,visibility 0s!important}
+    .szene.geht,.szene.kommt{filter:none!important;transform:none!important}
+    .zm-partikel{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div id="fortschritt"></div>
+<canvas id="konfetti"></canvas>
+<div class="warp" id="warp"></div>
+
+<!-- ═════════════ PORTADA: MÁQUINA DEL TIEMPO ═════════════ -->
+<header class="hero" id="start" data-zustand="aus">
+
+  <!-- Escenarios dibujados (cambian detrás de la máquina) -->
+  <div class="szenen" aria-hidden="true">
+
+    <!-- ESCENARIO: LABOR -->
+    <div class="szene aktiv" data-szene="labor" style="background:#132331">
+      <svg viewBox="0 0 1600 900">
+        <defs>
+          <linearGradient id="lb-wand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#29465B"/><stop offset=".72" stop-color="#1D3447"/><stop offset="1" stop-color="#192A3A"/></linearGradient>
+          <linearGradient id="lb-boden" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F374A"/><stop offset="1" stop-color="#0E1A24"/></linearGradient>
+          <linearGradient id="lb-kegelfarbe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#78A6B8" stop-opacity=".42"/><stop offset="1" stop-color="#78A6B8" stop-opacity="0"/></linearGradient>
+          <radialGradient id="lb-platt-glow"><stop offset="0" stop-color="#36C5C0" stop-opacity=".6"/><stop offset="1" stop-color="#36C5C0" stop-opacity="0"/></radialGradient>
+          <pattern id="lb-paneele" x="10" y="96" width="198" height="250" patternUnits="userSpaceOnUse">
+            <rect x="6" y="6" width="186" height="238" rx="16" fill="#213B4F" stroke="#30536B" stroke-width="3"/>
+            <path d="M20 125 H178" stroke="#30536B" stroke-width="2"/>
+            <g fill="#3E6680"><circle cx="22" cy="22" r="4"/><circle cx="176" cy="22" r="4"/><circle cx="22" cy="228" r="4"/><circle cx="176" cy="228" r="4"/></g>
+          </pattern>
+        </defs>
+        <rect width="1600" height="900" fill="url(#lb-wand)"/>
+        <rect x="0" y="96" width="1600" height="500" fill="url(#lb-paneele)"/>
+        <rect width="1600" height="74" fill="#132331"/>
+        <rect y="70" width="1600" height="7" fill="#36C5C0" opacity=".45"/>
+        <g class="lb-kegel"><path d="M330 100 H450 L640 660 H140 Z" fill="url(#lb-kegelfarbe)"/><path d="M740 100 H860 L1050 660 H550 Z" fill="url(#lb-kegelfarbe)"/><path d="M1150 100 H1270 L1460 660 H960 Z" fill="url(#lb-kegelfarbe)"/></g>
+        <g fill="#2C4A5F" stroke="#0F1A24" stroke-width="3" stroke-linejoin="round"><path d="M350 74 H430 L456 100 H324 Z"/><path d="M760 74 H840 L866 100 H734 Z"/><path d="M1170 74 H1250 L1276 100 H1144 Z"/></g>
+        <g fill="#8FF5EE"><rect x="340" y="96" width="100" height="5" rx="2"/><rect x="750" y="96" width="100" height="5" rx="2"/><rect x="1160" y="96" width="100" height="5" rx="2"/></g>
+        <g fill="none" stroke="#0F1B26" stroke-width="7" stroke-linecap="round"><path d="M40 74 C 70 210, 210 230, 250 74"/><path d="M560 74 C 590 150, 680 160, 700 74"/><path d="M900 74 C 930 160, 1020 160, 1040 74"/><path d="M1330 74 C 1360 220, 1500 210, 1550 74"/></g>
+        <!-- Pantalla -->
+        <rect x="60" y="140" width="330" height="205" rx="18" fill="#0D1A25" stroke="#36C5C0" stroke-width="4"/>
+        <path class="lb-kurve" d="M84 245 Q 114 185 144 245 T 204 245 T 264 245 T 324 245 T 366 245" fill="none" stroke="#36C5C0" stroke-width="4" stroke-dasharray="8 6"/>
+        <g fill="#78A6B8"><rect x="88" y="300" width="14" height="26"/><rect x="108" y="290" width="14" height="36"/><rect x="128" y="306" width="14" height="20"/><rect x="148" y="284" width="14" height="42"/><rect x="168" y="296" width="14" height="30"/></g>
+        <text x="230" y="320" fill="#36C5C0" font-family="ui-monospace, monospace" font-size="20" font-weight="700">Δt = 0</text>
+        <circle class="lb-blink" cx="362" cy="166" r="7" fill="#8FF5EE"/>
+        <rect x="205" y="345" width="40" height="32" fill="#1D3244"/>
+        <!-- Pizarra -->
+        <rect x="1200" y="130" width="340" height="220" rx="10" fill="#1E3A44" stroke="#8C7454" stroke-width="10"/>
+        <g fill="none" stroke="#F2F6F7" stroke-width="3" stroke-linecap="round" opacity=".9"><circle cx="1470" cy="200" r="32"/><path d="M1470 200 V 178 M1470 200 L 1488 212"/><path d="M1436 320 L 1470 270 L 1504 320 Z"/></g>
+        <g fill="#F2F6F7" font-family="Caveat, 'Comic Sans MS', cursive" opacity=".92"><text x="1228" y="198" font-size="40">E = mc²</text><text x="1228" y="258" font-size="40">Δt = ?</text><text x="1228" y="318" font-size="30">1789 → 2014</text></g>
+        <!-- Tubos -->
+        <rect x="36" y="400" width="58" height="250" rx="29" fill="#36C5C0" fill-opacity=".12" stroke="#78A6B8" stroke-width="4"/>
+        <rect x="45" y="478" width="40" height="164" rx="20" fill="#36C5C0" fill-opacity=".6"/>
+        <rect x="112" y="440" width="58" height="210" rx="29" fill="#36C5C0" fill-opacity=".12" stroke="#78A6B8" stroke-width="4"/>
+        <rect x="121" y="500" width="40" height="142" rx="20" fill="#8FF5EE" fill-opacity=".5"/>
+        <rect x="1430" y="420" width="58" height="230" rx="29" fill="#36C5C0" fill-opacity=".12" stroke="#78A6B8" stroke-width="4"/>
+        <rect x="1439" y="492" width="40" height="150" rx="20" fill="#36C5C0" fill-opacity=".6"/>
+        <rect x="1506" y="390" width="58" height="260" rx="29" fill="#36C5C0" fill-opacity=".12" stroke="#78A6B8" stroke-width="4"/>
+        <rect x="1515" y="470" width="40" height="172" rx="20" fill="#8FF5EE" fill-opacity=".5"/>
+        <g fill="#2C4A5F" stroke="#0F1A24" stroke-width="3"><rect x="30" y="388" width="70" height="18" rx="6"/><rect x="30" y="640" width="70" height="16" rx="6"/><rect x="106" y="428" width="70" height="18" rx="6"/><rect x="106" y="640" width="70" height="16" rx="6"/><rect x="1424" y="408" width="70" height="18" rx="6"/><rect x="1424" y="640" width="70" height="16" rx="6"/><rect x="1500" y="378" width="70" height="18" rx="6"/><rect x="1500" y="640" width="70" height="16" rx="6"/></g>
+        <g fill="#F2F6F7" fill-opacity=".75"><circle class="lb-blase" cx="60" cy="620" r="6"/><circle class="lb-blase b2" cx="72" cy="612" r="4"/><circle class="lb-blase b3" cx="140" cy="622" r="5"/><circle class="lb-blase b2" cx="1456" cy="620" r="6"/><circle class="lb-blase b3" cx="1536" cy="622" r="5"/><circle class="lb-blase" cx="1546" cy="610" r="4"/></g>
+        <!-- Estante -->
+        <rect x="1170" y="432" width="250" height="14" rx="4" fill="#2C4A5F" stroke="#0F1A24" stroke-width="3"/>
+        <g stroke="#0F1A24" stroke-width="3"><rect x="1182" y="370" width="22" height="62" fill="#78A6B8"/><rect x="1206" y="380" width="18" height="52" fill="#36C5C0"/><rect x="1226" y="364" width="24" height="68" fill="#A9B7C6"/><rect x="1252" y="384" width="16" height="48" fill="#F2F6F7"/></g>
+        <circle cx="1318" cy="392" r="30" fill="#36C5C0" fill-opacity=".85" stroke="#F2F6F7" stroke-width="3"/>
+        <ellipse cx="1318" cy="392" rx="12" ry="30" fill="none" stroke="#F2F6F7" stroke-width="2"/>
+        <path d="M1288 392 H1348" stroke="#F2F6F7" stroke-width="2"/>
+        <path d="M1318 422 V432 M1300 432 H1336" stroke="#0F1A24" stroke-width="5"/>
+        <path d="M1384 368 H1404 V 386 L 1428 430 H 1360 L 1384 386 Z" fill="#F2F6F7" fill-opacity=".2" stroke="#78A6B8" stroke-width="3"/>
+        <path d="M1372 412 H1416 L1428 430 H1360 Z" fill="#36C5C0" fill-opacity=".8"/>
+        <!-- Mesa con bobina -->
+        <g stroke="#0F1A24" stroke-width="3" stroke-linejoin="round">
+          <rect x="200" y="566" width="330" height="18" rx="5" fill="#2C4A5F"/>
+          <rect x="220" y="584" width="16" height="60" fill="#22394B"/><rect x="494" y="584" width="16" height="60" fill="#22394B"/>
+          <rect x="236" y="520" width="150" height="46" rx="8" fill="#22394B"/>
+          <rect x="250" y="530" width="60" height="26" rx="4" fill="#0D1A25"/>
+          <circle cx="332" cy="543" r="8" fill="#78A6B8"/><circle cx="362" cy="543" r="8" fill="#78A6B8"/>
+          <rect x="440" y="526" width="60" height="40" rx="6" fill="#29465B"/>
+          <rect x="458" y="456" width="24" height="72" rx="4" fill="#B87745"/>
+          <circle cx="470" cy="444" r="22" fill="#A9B7C6"/>
+        </g>
+        <path d="M458 470 H482 M458 482 H482 M458 494 H482 M458 506 H482" stroke="#7A4A2A" stroke-width="2"/>
+        <g class="lb-funke" fill="none" stroke="#8FF5EE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M470 422 L462 404 L474 398 L466 380"/><path d="M488 432 L506 420 L500 410 L520 402"/><path d="M452 432 L434 418 L442 410 L424 400"/></g>
+        <!-- Suelo y plataforma -->
+        <rect y="640" width="1600" height="260" fill="url(#lb-boden)"/>
+        <g stroke="#2B4A60" stroke-width="2" opacity=".8" fill="none"><path d="M800 640 L-500 900 M800 640 L-60 900 M800 640 L380 900 M800 640 L800 900 M800 640 L1220 900 M800 640 L1660 900 M800 640 L2100 900 M0 676 H1600 M0 730 H1600 M0 812 H1600"/></g>
+        <ellipse class="lb-plattform-glow" cx="800" cy="700" rx="360" ry="62" fill="url(#lb-platt-glow)"/>
+        <ellipse cx="800" cy="690" rx="300" ry="44" fill="#1F3A4F" stroke="#36C5C0" stroke-width="4"/>
+        <ellipse cx="800" cy="688" rx="236" ry="30" fill="none" stroke="#78A6B8" stroke-width="2" stroke-dasharray="14 12"/>
+      </svg>
+    </div>
+
+    <!-- ESCENARIO: ÄGYPTEN -->
+    <div class="szene" data-szene="aegypten" style="background:#E08A4F">
+      <svg viewBox="0 0 1600 900">
+        <defs>
+          <linearGradient id="eg-himmel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E08A4F"/><stop offset=".42" stop-color="#EBAF69"/><stop offset=".7" stop-color="#F1D29C"/><stop offset="1" stop-color="#F6E3BF"/></linearGradient>
+          <radialGradient id="eg-sonne"><stop offset="0" stop-color="#FFF6DA"/><stop offset=".4" stop-color="#FFE3A0" stop-opacity=".85"/><stop offset="1" stop-color="#FFE3A0" stop-opacity="0"/></radialGradient>
+          <clipPath id="eg-pyr"><polygon points="520,642 800,215 1080,642"/></clipPath>
+          <g id="eg-palme">
+            <path d="M150 742 Q 136 640 168 548" fill="none" stroke="#8C5545" stroke-width="14" stroke-linecap="round"/>
+            <path d="M150 742 Q 136 640 168 548" fill="none" stroke="#6E4134" stroke-width="3" stroke-dasharray="4 12"/>
+            <g fill="#7C8A4E" stroke="#5B6538" stroke-width="3" stroke-linejoin="round">
+              <path d="M168 548 Q 120 520 74 548 Q 122 536 168 558 Z"/>
+              <path d="M168 548 Q 214 512 268 534 Q 214 532 170 560 Z"/>
+              <path d="M168 548 Q 150 494 104 482 Q 150 506 162 554 Z"/>
+              <path d="M168 548 Q 196 490 246 486 Q 196 506 174 556 Z"/>
+              <path d="M168 548 Q 136 568 112 614 Q 150 580 170 558 Z"/>
+              <path d="M168 548 Q 206 566 232 606 Q 196 578 168 560 Z"/>
+            </g>
+            <circle cx="160" cy="562" r="7" fill="#8C5545"/><circle cx="175" cy="564" r="7" fill="#8C5545"/>
+          </g>
+        </defs>
+        <rect width="1600" height="900" fill="url(#eg-himmel)"/>
+        <circle class="sz-sonne" cx="430" cy="250" r="200" fill="url(#eg-sonne)"/>
+        <circle cx="430" cy="250" r="74" fill="#FFF2CF"/>
+        <g class="sz-wolke" fill="#F7D9A8" opacity=".75"><path d="M1060 170 q30 -36 80 -18 q36 -34 88 2 q46 -4 52 30 H1040 q-6 -20 20 -14 z"/></g>
+        <g fill="none" stroke="#8C5545" stroke-width="4" stroke-linecap="round"><path d="M290 160 q12 -12 24 0 q12 -12 24 0"/><path d="M356 196 q9 -9 18 0 q9 -9 18 0"/><path d="M1220 140 q12 -12 24 0 q12 -12 24 0"/></g>
+        <path d="M0 598 Q 220 540 440 578 T 880 562 T 1320 574 T 1600 558 V 900 H 0 Z" fill="#EDD0A4"/>
+        <g stroke="#8C5545" stroke-width="3" stroke-linejoin="round"><polygon points="1180,612 1330,438 1400,612" fill="#E4C38F"/><polygon points="1330,438 1480,612 1400,612" fill="#C99A6A"/></g>
+        <g stroke="#8C5545" stroke-width="4" stroke-linejoin="round"><polygon points="90,642 320,368 410,642" fill="#E2BF87"/><polygon points="320,368 545,642 410,642" fill="#B97A5A"/></g>
+        <g stroke="#8C5545" stroke-width="4" stroke-linejoin="round"><polygon points="520,642 800,215 930,642" fill="#D9B879"/><polygon points="800,215 1080,642 930,642" fill="#A95E48"/></g>
+        <g clip-path="url(#eg-pyr)" stroke="#8C5545" stroke-opacity=".28" stroke-width="2"><path d="M500 300 H1100 M500 372 H1100 M500 444 H1100 M500 516 H1100 M500 588 H1100"/></g>
+        <polygon points="800,215 823,250 777,250" fill="#F7E2A8" stroke="#8C5545" stroke-width="3" stroke-linejoin="round"/>
+        <!-- Obelisco -->
+        <g stroke="#8C5545" stroke-width="3" stroke-linejoin="round"><polygon points="512,652 520,330 531,312 542,330 550,652" fill="#D9B879"/></g>
+        <polygon points="531,312 542,330 550,652 531,652" fill="#B98E5C"/>
+        <g fill="#8C5545" opacity=".55"><rect x="524" y="372" width="12" height="6"/><circle cx="530" cy="402" r="5"/><rect x="524" y="424" width="12" height="12"/><path d="M524 466 h12 l-6 12 z"/><rect x="526" y="498" width="8" height="18"/></g>
+        <!-- Esfinge -->
+        <g stroke="#8C5545" stroke-width="4" stroke-linejoin="round">
+          <path d="M1150 662 V 600 Q 1152 560 1200 556 H 1370 Q 1420 556 1424 600 V 662 Z" fill="#D9B879"/>
+          <path d="M1350 662 Q 1350 594 1398 592 Q 1424 600 1424 662 Z" fill="#C9A46C"/>
+          <path d="M1150 662 V 630 H 1030 Q 1008 644 1024 662 Z" fill="#D9B879"/>
+          <path d="M1186 662 V 644 H 1080 Q 1066 652 1076 662 Z" fill="#C9A46C"/>
+          <path d="M1100 604 L 1108 500 Q 1136 470 1166 500 L 1176 604 Z" fill="#E9CBA8"/>
+          <path d="M1116 518 Q 1116 500 1137 500 Q 1158 500 1158 518 V 562 Q 1137 576 1116 562 Z" fill="#D9B879"/>
+          <rect x="1130" y="568" width="14" height="26" rx="4" fill="#A95E48"/>
+        </g>
+        <path d="M1104 530 H1114 M1160 530 H1172 M1103 554 H1114 M1160 554 H1174 M1102 590 H1128 M1146 590 H1176" stroke="#A95E48" stroke-width="5"/>
+        <circle cx="1128" cy="528" r="3.5" fill="#5C3A2E"/><circle cx="1147" cy="528" r="3.5" fill="#5C3A2E"/>
+        <!-- Dunas, Nilo y palmeras -->
+        <path d="M0 688 Q 320 646 640 674 T 1260 666 T 1600 656 V 900 H 0 Z" fill="#E9CBA8"/>
+        <path d="M0 704 Q 260 688 520 710 Q 640 720 760 712 L 760 730 Q 420 750 0 740 Z" fill="#29465B" stroke="#1D3344" stroke-width="3"/>
+        <path d="M60 718 h40 M210 724 h50 M390 728 h40 M560 722 h40" stroke="#78A6B8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M0 806 Q 420 752 820 792 T 1600 772 V 900 H 0 Z" fill="#D9B879"/>
+        <use href="#eg-palme"/>
+        <use href="#eg-palme" transform="translate(170 120) scale(.8)"/>
+      </svg>
+    </div>
+
+    <!-- ESCENARIO: TROJA -->
+    <div class="szene" data-szene="troja" style="background:#192A3A">
+      <svg viewBox="0 0 1600 900">
+        <defs>
+          <linearGradient id="tr-himmel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#192A3A"/><stop offset=".42" stop-color="#426C83"/><stop offset=".76" stop-color="#A8B0B5"/><stop offset="1" stop-color="#D8DAD5"/></linearGradient>
+          <pattern id="tr-steine" x="0" y="462" width="88" height="44" patternUnits="userSpaceOnUse"><path d="M0 1 H88 M0 22 H88 M44 1 V22 M0 22 V44 M88 22 V44" fill="none" stroke="#8C959B" stroke-width="2"/></pattern>
+          <pattern id="tr-zinnen" x="0" y="440" width="44" height="24" patternUnits="userSpaceOnUse"><rect x="1.5" y="2" width="26" height="22" fill="#A8B0B5" stroke="#5E6B73" stroke-width="3"/></pattern>
+        </defs>
+        <rect width="1600" height="900" fill="url(#tr-himmel)"/>
+        <g class="sz-wolke" fill="#2C475B" opacity=".8"><path d="M90 190 q34 -54 100 -30 q44 -48 112 -4 q58 -10 66 40 H70 q-8 -22 20 -6 z"/><path d="M980 140 q40 -60 116 -30 q50 -50 124 -2 q66 -8 72 46 H960 q-8 -24 20 -14 z"/></g>
+        <g class="sz-wolke w2" fill="#6F8FA3" opacity=".55"><path d="M520 250 q26 -40 78 -22 q36 -36 86 0 q44 -6 48 30 H500 q-6 -18 20 -8 z"/><path d="M1300 280 q26 -40 78 -22 q36 -36 86 0 q44 -6 48 30 H1280 q-6 -18 20 -8 z"/></g>
+        <rect x="0" y="560" width="780" height="70" fill="#426C83"/>
+        <path d="M30 582 h50 M150 600 h60 M320 588 h40 M480 604 h60 M640 590 h40" stroke="#A8B0B5" stroke-width="3" stroke-linecap="round" opacity=".75"/>
+        <g stroke="#192A3A" stroke-width="3" stroke-linejoin="round"><path d="M100 578 h96 l-16 18 h-64 z" fill="#8C5545"/><path d="M148 578 V 520 L 186 570 Z" fill="#E7E3D8"/><path d="M300 572 h74 l-12 14 h-50 z" fill="#8C5545"/><path d="M337 572 V 528 L 366 564 Z" fill="#E7E3D8"/></g>
+        <path d="M640 580 Q 900 470 1180 512 T 1600 494 V 640 H 640 Z" fill="#7C8F9B"/>
+        <!-- Templo griego -->
+        <g stroke="#2B3E4F" stroke-width="3" stroke-linejoin="round" fill="#E7E3D8">
+          <polygon points="1160,368 1310,306 1460,368"/>
+          <rect x="1170" y="368" width="280" height="14"/>
+          <rect x="1186" y="382" width="18" height="70"/><rect x="1232" y="382" width="18" height="70"/><rect x="1278" y="382" width="18" height="70"/><rect x="1324" y="382" width="18" height="70"/><rect x="1370" y="382" width="18" height="70"/><rect x="1416" y="382" width="18" height="70"/>
+          <rect x="1160" y="452" width="300" height="14"/>
+        </g>
+        <!-- Murallas y torres -->
+        <rect x="0" y="440" width="1600" height="24" fill="url(#tr-zinnen)"/>
+        <rect x="0" y="462" width="1600" height="190" fill="#A8B0B5" stroke="#5E6B73" stroke-width="3"/>
+        <rect x="0" y="462" width="1600" height="190" fill="url(#tr-steine)" opacity=".7"/>
+        <g fill="#B7BEC2" stroke="#5E6B73" stroke-width="3">
+          <rect x="110" y="372" width="130" height="280"/><rect x="470" y="392" width="100" height="260"/><rect x="1030" y="392" width="100" height="260"/><rect x="1360" y="372" width="130" height="280"/>
+          <rect x="640" y="420" width="70" height="232"/><rect x="890" y="420" width="70" height="232"/>
+          <rect x="110" y="350" width="18" height="22"/><rect x="138" y="350" width="18" height="22"/><rect x="166" y="350" width="18" height="22"/><rect x="194" y="350" width="18" height="22"/><rect x="222" y="350" width="18" height="22"/>
+          <rect x="470" y="370" width="18" height="22"/><rect x="497" y="370" width="18" height="22"/><rect x="524" y="370" width="18" height="22"/><rect x="552" y="370" width="18" height="22"/>
+          <rect x="1030" y="370" width="18" height="22"/><rect x="1057" y="370" width="18" height="22"/><rect x="1084" y="370" width="18" height="22"/><rect x="1112" y="370" width="18" height="22"/>
+          <rect x="1360" y="350" width="18" height="22"/><rect x="1388" y="350" width="18" height="22"/><rect x="1416" y="350" width="18" height="22"/><rect x="1444" y="350" width="18" height="22"/><rect x="1472" y="350" width="18" height="22"/>
+          <rect x="640" y="398" width="18" height="22"/><rect x="666" y="398" width="18" height="22"/><rect x="692" y="398" width="18" height="22"/>
+          <rect x="890" y="398" width="18" height="22"/><rect x="916" y="398" width="18" height="22"/><rect x="942" y="398" width="18" height="22"/>
+        </g>
+        <g fill="#192A3A"><path d="M163 452 v-26 a12 12 0 0 1 24 0 v26 z"/><path d="M508 470 v-22 a12 12 0 0 1 24 0 v22 z"/><path d="M1068 470 v-22 a12 12 0 0 1 24 0 v22 z"/><path d="M1413 452 v-26 a12 12 0 0 1 24 0 v26 z"/></g>
+        <path d="M710 652 V 548 Q 800 478 890 548 V 652 Z" fill="#192A3A" stroke="#5E6B73" stroke-width="4"/>
+        <path d="M724 652 V 556 Q 800 496 876 556 V 652 Z" fill="#8C5545"/>
+        <path d="M800 512 V 652 M762 526 V 652 M838 526 V 652" stroke="#5C3A2E" stroke-width="3"/>
+        <g stroke="#2B3E4F" stroke-width="4"><path d="M175 350 V 286"/><path d="M1425 350 V 286"/></g>
+        <path class="sz-fahne" d="M177 288 h50 l-12 13 l12 13 h-50 z" fill="#8C5545" stroke="#2B3E4F" stroke-width="2"/>
+        <path class="sz-fahne f2" d="M1427 288 h50 l-12 13 l12 13 h-50 z" fill="#426C83" stroke="#2B3E4F" stroke-width="2"/>
+        <!-- Suelo -->
+        <rect y="652" width="1600" height="248" fill="#E7E3D8"/>
+        <polygon points="724,652 876,652 1010,900 590,900" fill="#DAD4C6"/>
+        <path d="M0 720 Q 300 700 560 730 M1060 740 Q 1300 712 1600 730" stroke="#CFC8B8" stroke-width="6" fill="none"/>
+        <!-- Caballo de Troya -->
+        <g stroke="#4A2F25" stroke-width="4" stroke-linejoin="round">
+          <rect x="190" y="640" width="350" height="26" rx="6" fill="#6E4638"/>
+          <rect x="226" y="520" width="32" height="122" fill="#7D4C3E"/>
+          <rect x="272" y="520" width="32" height="122" fill="#8C5545"/>
+          <rect x="426" y="520" width="32" height="122" fill="#7D4C3E"/>
+          <rect x="472" y="520" width="32" height="122" fill="#8C5545"/>
+          <path d="M214 458 Q 168 486 184 566" fill="none" stroke="#5C3A2E" stroke-width="14" stroke-linecap="round"/>
+          <rect x="204" y="428" width="322" height="108" rx="50" fill="#8C5545"/>
+          <path d="M452 452 L 500 330 L 556 326 L 538 472 Z" fill="#8C5545"/>
+          <path d="M498 304 Q 516 270 558 280 L 614 330 Q 626 354 600 360 L 546 352 Q 504 346 498 304 Z" fill="#8C5545"/>
+          <path d="M512 290 L 520 254 L 538 282 Z" fill="#7D4C3E"/>
+        </g>
+        <path d="M498 304 L 484 322 L 496 334 L 478 352 L 490 364 L 468 392 L 478 402 L 454 450" fill="none" stroke="#5C3A2E" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <g stroke="#6E4638" stroke-width="3" fill="none" opacity=".75"><path d="M222 462 H508 M214 494 H518"/><path d="M300 430 V534 M380 428 V536 M450 430 V534"/></g>
+        <circle cx="574" cy="314" r="6" fill="#192A3A"/>
+        <g fill="#5A3A2E" stroke="#3F2A22" stroke-width="4"><circle cx="236" cy="676" r="22"/><circle cx="366" cy="676" r="22"/><circle cx="496" cy="676" r="22"/></g>
+        <g fill="#A8B0B5"><circle cx="236" cy="676" r="6"/><circle cx="366" cy="676" r="6"/><circle cx="496" cy="676" r="6"/></g>
+        <!-- Campamento y columna -->
+        <g stroke="#8C5545" stroke-width="3" stroke-linejoin="round"><path d="M1180 770 L 1250 686 L 1320 770 Z" fill="#E7E3D8"/><path d="M1250 686 L 1262 770 L 1238 770 Z" fill="#C9C2B2"/><path d="M1320 790 L 1400 696 L 1480 790 Z" fill="#F1EEE6"/><path d="M1400 696 L 1414 790 L 1386 790 Z" fill="#C9C2B2"/></g>
+        <g stroke="#5E6B73" stroke-width="3" stroke-linejoin="round"><rect x="1520" y="560" width="48" height="250" fill="#C9CED1"/><path d="M1510 562 L1522 548 L1534 556 L1548 540 L1562 552 L1578 546 V 562 Z" fill="#B7BEC2"/></g>
+        <path d="M1532 566 V806 M1544 566 V806 M1556 566 V806" stroke="#5E6B73" stroke-width="2" opacity=".6"/>
+      </svg>
+    </div>
+
+    <!-- ESCENARIO: FLORENZ -->
+    <div class="szene" data-szene="florenz" style="background:#5E92A8">
+      <svg viewBox="0 0 1600 900">
+        <defs>
+          <linearGradient id="fl-himmel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5E92A8"/><stop offset=".5" stop-color="#78A6B8"/><stop offset=".82" stop-color="#CFE2E9"/><stop offset="1" stop-color="#F3EBDA"/></linearGradient>
+        </defs>
+        <rect width="1600" height="900" fill="url(#fl-himmel)"/>
+        <g class="sz-wolke" fill="#FFF8EA" opacity=".9"><path d="M140 200 q30 -44 88 -24 q40 -40 98 2 q52 -6 58 34 H120 q-8 -20 20 -12 z"/><path d="M1100 150 q34 -50 98 -28 q44 -44 108 2 q56 -6 62 38 H1080 q-8 -22 20 -12 z"/></g>
+        <g class="sz-wolke w2" fill="#FFF8EA" opacity=".6"><path d="M560 120 q24 -34 70 -18 q32 -30 76 2 q40 -4 44 26 H544 q-6 -16 16 -10 z"/></g>
+        <path d="M0 512 Q 200 446 420 488 T 860 470 T 1300 480 T 1600 458 V 760 H 0 Z" fill="#C9B48E"/>
+        <path d="M0 560 Q 260 504 520 542 T 1040 530 T 1600 520 V 760 H 0 Z" fill="#B88B56"/>
+        <g fill="#5E5A3A"><ellipse cx="70" cy="530" rx="12" ry="46"/><ellipse cx="104" cy="540" rx="10" ry="36"/><ellipse cx="1500" cy="502" rx="12" ry="48"/><ellipse cx="1534" cy="514" rx="10" ry="38"/><ellipse cx="300" cy="500" rx="9" ry="32"/></g>
+        <!-- Catedral y cúpula -->
+        <g stroke="#7E4535" stroke-width="4" stroke-linejoin="round">
+          <rect x="560" y="392" width="480" height="168" fill="#FFF8EA"/>
+          <path d="M548 394 L 800 362 L 1052 394 Z" fill="#A95E48"/>
+          <rect x="678" y="300" width="244" height="94" fill="#FFF8EA"/>
+          <path d="M664 304 Q 668 150 800 116 Q 932 150 936 304 Z" fill="#A95E48"/>
+          <rect x="782" y="78" width="36" height="42" fill="#FFF8EA"/>
+          <path d="M774 80 L 800 50 L 826 80 Z" fill="#FFF8EA"/>
+          <circle cx="800" cy="44" r="7" fill="#D9B879"/>
+        </g>
+        <g fill="none" stroke="#FFF8EA" stroke-width="7" stroke-linecap="round"><path d="M800 122 V 300"/><path d="M748 130 Q 712 200 708 300"/><path d="M852 130 Q 888 200 892 300"/><path d="M700 186 Q 682 246 684 300"/><path d="M900 186 Q 918 246 916 300"/></g>
+        <g fill="#A95E48" stroke="#7E4535" stroke-width="3"><circle cx="722" cy="346" r="14"/><circle cx="800" cy="346" r="14"/><circle cx="878" cy="346" r="14"/></g>
+        <path d="M560 432 H1040 M560 520 H1040" stroke="#B88B56" stroke-width="3"/>
+        <g fill="#B88B56"><path d="M596 506 v-36 a11 11 0 0 1 22 0 v36 z"/><path d="M660 506 v-36 a11 11 0 0 1 22 0 v36 z"/><path d="M918 506 v-36 a11 11 0 0 1 22 0 v36 z"/><path d="M982 506 v-36 a11 11 0 0 1 22 0 v36 z"/></g>
+        <!-- Campanario -->
+        <g stroke="#7E4535" stroke-width="4" stroke-linejoin="round">
+          <rect x="1066" y="176" width="72" height="384" fill="#FFF8EA"/>
+          <rect x="1058" y="162" width="88" height="16" fill="#B88B56"/>
+          <path d="M1062 162 L 1102 126 L 1142 162 Z" fill="#A95E48"/>
+        </g>
+        <g fill="#A95E48" opacity=".9"><rect x="1066" y="256" width="72" height="8"/><rect x="1066" y="350" width="72" height="8"/><rect x="1066" y="444" width="72" height="8"/></g>
+        <g fill="#5E3326"><path d="M1090 240 v-34 a12 12 0 0 1 24 0 v34 z"/><path d="M1090 334 v-30 a12 12 0 0 1 24 0 v30 z"/><path d="M1090 428 v-26 a12 12 0 0 1 24 0 v26 z"/></g>
+        <!-- Palazzo Vecchio -->
+        <g stroke="#7E4535" stroke-width="4" stroke-linejoin="round" fill="#D9B879">
+          <rect x="392" y="404" width="196" height="156"/>
+          <rect x="490" y="214" width="48" height="190"/>
+          <rect x="476" y="188" width="76" height="30"/>
+          <rect x="500" y="150" width="28" height="38"/>
+          <path d="M494 150 L 514 124 L 534 150 Z" fill="#A95E48"/>
+        </g>
+        <g fill="#D9B879" stroke="#7E4535" stroke-width="3"><rect x="392" y="388" width="16" height="16"/><rect x="420" y="388" width="16" height="16"/><rect x="448" y="388" width="16" height="16"/><rect x="544" y="388" width="16" height="16"/><rect x="572" y="388" width="16" height="16"/><rect x="476" y="174" width="14" height="14"/><rect x="496" y="174" width="14" height="14"/><rect x="518" y="174" width="14" height="14"/><rect x="538" y="174" width="14" height="14"/></g>
+        <circle cx="514" cy="262" r="12" fill="#FFF8EA" stroke="#7E4535" stroke-width="3"/>
+        <g fill="#8A5A3A"><rect x="406" y="430" width="14" height="22" rx="6"/><rect x="440" y="430" width="14" height="22" rx="6"/><rect x="552" y="430" width="14" height="22" rx="6"/><rect x="406" y="476" width="14" height="22" rx="6"/><rect x="440" y="476" width="14" height="22" rx="6"/><rect x="552" y="476" width="14" height="22" rx="6"/></g>
+        <!-- Casas -->
+        <g stroke="#7E4535" stroke-width="3" stroke-linejoin="round">
+          <rect x="0" y="560" width="110" height="130" fill="#F4E6CC"/><polygon points="-6,560 55,534 116,560" fill="#A95E48"/>
+          <rect x="110" y="590" width="130" height="100" fill="#E7C795"/><polygon points="104,590 175,564 246,590" fill="#B9694F"/>
+          <rect x="240" y="548" width="100" height="142" fill="#FFF8EA"/><polygon points="234,548 290,522 346,548" fill="#A95E48"/>
+          <rect x="340" y="600" width="140" height="90" fill="#F1DDB8"/><polygon points="334,600 410,574 486,600" fill="#A95E48"/>
+          <rect x="480" y="578" width="120" height="112" fill="#E7C795"/><polygon points="474,578 540,552 606,578" fill="#B9694F"/>
+          <rect x="600" y="610" width="150" height="80" fill="#FFF8EA"/><polygon points="594,610 675,584 756,610" fill="#A95E48"/>
+          <rect x="750" y="592" width="110" height="98" fill="#F4E6CC"/><polygon points="744,592 805,566 866,592" fill="#B9694F"/>
+          <rect x="860" y="606" width="140" height="84" fill="#F1DDB8"/><polygon points="854,606 930,580 1006,606" fill="#A95E48"/>
+          <rect x="1000" y="582" width="120" height="108" fill="#FFF8EA"/><polygon points="994,582 1060,556 1126,582" fill="#A95E48"/>
+          <rect x="1120" y="600" width="130" height="90" fill="#E7C795"/><polygon points="1114,600 1185,574 1256,600" fill="#B9694F"/>
+          <rect x="1250" y="566" width="110" height="124" fill="#F4E6CC"/><polygon points="1244,566 1305,540 1366,566" fill="#A95E48"/>
+          <rect x="1360" y="596" width="130" height="94" fill="#FFF8EA"/><polygon points="1354,596 1425,570 1496,596" fill="#B9694F"/>
+          <rect x="1490" y="576" width="116" height="114" fill="#F1DDB8"/><polygon points="1484,576 1548,550 1612,576" fill="#A95E48"/>
+        </g>
+        <g fill="#9A6A45">
+          <rect x="20" y="584" width="14" height="20" rx="3"/><rect x="76" y="584" width="14" height="20" rx="3"/>
+          <rect x="130" y="614" width="14" height="20" rx="3"/><rect x="206" y="614" width="14" height="20" rx="3"/>
+          <rect x="260" y="572" width="14" height="20" rx="3"/><rect x="306" y="572" width="14" height="20" rx="3"/>
+          <rect x="360" y="624" width="14" height="20" rx="3"/><rect x="446" y="624" width="14" height="20" rx="3"/>
+          <rect x="500" y="602" width="14" height="20" rx="3"/><rect x="566" y="602" width="14" height="20" rx="3"/>
+          <rect x="620" y="634" width="14" height="20" rx="3"/><rect x="716" y="634" width="14" height="20" rx="3"/>
+          <rect x="770" y="616" width="14" height="20" rx="3"/><rect x="826" y="616" width="14" height="20" rx="3"/>
+          <rect x="880" y="630" width="14" height="20" rx="3"/><rect x="966" y="630" width="14" height="20" rx="3"/>
+          <rect x="1020" y="606" width="14" height="20" rx="3"/><rect x="1086" y="606" width="14" height="20" rx="3"/>
+          <rect x="1140" y="624" width="14" height="20" rx="3"/><rect x="1216" y="624" width="14" height="20" rx="3"/>
+          <rect x="1270" y="590" width="14" height="20" rx="3"/><rect x="1326" y="590" width="14" height="20" rx="3"/>
+          <rect x="1380" y="620" width="14" height="20" rx="3"/><rect x="1456" y="620" width="14" height="20" rx="3"/>
+          <rect x="1510" y="600" width="14" height="20" rx="3"/><rect x="1572" y="600" width="14" height="20" rx="3"/>
+        </g>
+        <!-- Río y puente -->
+        <rect y="690" width="1600" height="66" fill="#78A6B8"/>
+        <path d="M40 712 h60 M220 730 h50 M420 716 h70 M700 734 h50 M980 714 h70 M1240 732 h60 M1440 716 h50" stroke="#FFF8EA" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+        <g stroke="#7E4535" stroke-width="3" stroke-linejoin="round"><rect x="80" y="668" width="420" height="32" fill="#E7C795"/><path d="M60 700 H520 V 722 Q 470 690 430 722 Q 380 690 340 722 Q 290 690 250 722 Q 200 690 160 722 Q 110 690 60 722 Z" fill="#B88B56"/></g>
+        <rect y="756" width="1600" height="144" fill="#B88B56"/>
+        <path d="M0 756 H1600" stroke="#7E4535" stroke-width="4"/>
+      </svg>
+    </div>
+
+    <!-- ESCENARIO: FRANKREICH (Versailles) -->
+    <div class="szene" data-szene="frankreich" style="background:#8FA6BA">
+      <svg viewBox="0 0 1600 900">
+        <defs>
+          <linearGradient id="vs-himmel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FA6BA"/><stop offset=".5" stop-color="#C6D3DE"/><stop offset=".8" stop-color="#EEF0EC"/><stop offset="1" stop-color="#F6F1E3"/></linearGradient>
+          <radialGradient id="vs-sonne"><stop offset="0" stop-color="#FFF8EA"/><stop offset=".45" stop-color="#F6E7B8" stop-opacity=".7"/><stop offset="1" stop-color="#F6E7B8" stop-opacity="0"/></radialGradient>
+          <pattern id="vs-fenster" x="150" y="354" width="52" height="104" patternUnits="userSpaceOnUse">
+            <path d="M15 94 V 28 a11 11 0 0 1 22 0 V 94 Z" fill="#A9B7C6" stroke="#6F8296" stroke-width="2.5"/>
+            <path d="M26 18 V 94 M15 56 H37" stroke="#FFF8EA" stroke-width="2"/>
+          </pattern>
+        </defs>
+        <rect width="1600" height="900" fill="url(#vs-himmel)"/>
+        <circle class="sz-sonne" cx="1260" cy="160" r="170" fill="url(#vs-sonne)"/>
+        <g class="sz-wolke" fill="#FFFFFF" opacity=".9"><path d="M120 190 q30 -44 88 -24 q40 -40 98 2 q52 -6 58 34 H100 q-8 -20 20 -12 z"/><path d="M560 120 q24 -34 70 -18 q32 -30 76 2 q40 -4 44 26 H544 q-6 -16 16 -10 z"/></g>
+        <g class="sz-wolke w2" fill="#FFFFFF" opacity=".7"><path d="M960 230 q30 -44 88 -24 q40 -40 98 2 q52 -6 58 34 H940 q-8 -20 20 -12 z"/></g>
+        <path d="M0 350 q40 -70 80 0 q40 -50 80 0 q40 -84 80 0 q40 -60 80 0 q40 -70 80 0 q40 -50 80 0 q40 -84 80 0 q40 -60 80 0 q40 -70 80 0 q40 -50 80 0 q40 -84 80 0 q40 -60 80 0 q40 -70 80 0 q40 -50 80 0 q40 -84 80 0 q40 -60 80 0 q40 -70 80 0 q40 -50 80 0 q40 -84 80 0 q40 -60 80 0 V 600 H 0 Z" fill="#5E7356"/>
+        <!-- Palacio -->
+        <g stroke="#6F8296" stroke-width="3" stroke-linejoin="round">
+          <path d="M128 342 L 160 300 H 1440 L 1472 342 Z" fill="#A9B7C6"/>
+          <rect x="140" y="342" width="1320" height="228" fill="#FFF8EA"/>
+          <rect x="140" y="320" width="190" height="250" fill="#FFF8EA"/>
+          <path d="M136 320 L 235 282 L 334 320 Z" fill="#FFF8EA"/>
+          <rect x="1270" y="320" width="190" height="250" fill="#FFF8EA"/>
+          <path d="M1266 320 L 1365 282 L 1464 320 Z" fill="#FFF8EA"/>
+          <rect x="630" y="300" width="340" height="270" fill="#FFF8EA"/>
+        </g>
+        <path d="M618 302 L 800 236 L 982 302 Z" fill="#FFF8EA" stroke="#D9B879" stroke-width="6" stroke-linejoin="round"/>
+        <circle cx="800" cy="276" r="15" fill="#D9B879" stroke="#9C7B3E" stroke-width="3"/>
+        <rect x="150" y="354" width="1300" height="206" fill="url(#vs-fenster)"/>
+        <path d="M140 458 H1460 M140 344 H1460" stroke="#D9B879" stroke-width="5"/>
+        <path d="M164 300 H1436" stroke="#D9B879" stroke-width="7" stroke-dasharray="4 12"/>
+        <g fill="#A9B7C6" stroke="#6F8296" stroke-width="3"><rect x="260" y="276" width="16" height="26"/><rect x="520" y="280" width="16" height="22"/><rect x="1064" y="280" width="16" height="22"/><rect x="1324" y="276" width="16" height="26"/></g>
+        <rect x="120" y="570" width="1360" height="14" fill="#E2DCC8" stroke="#6F8296" stroke-width="2"/>
+        <!-- Jardines -->
+        <rect y="584" width="1600" height="316" fill="#EFE8D2"/>
+        <polygon points="742,584 858,584 990,900 610,900" fill="#F7F2E2"/>
+        <g fill="#73866A" stroke="#4F6046" stroke-width="3" stroke-linejoin="round">
+          <polygon points="330,598 740,598 706,664 196,664"/>
+          <polygon points="860,598 1270,598 1404,664 894,664"/>
+          <polygon points="176,686 694,686 640,804 -20,804"/>
+          <polygon points="906,686 1424,686 1620,804 960,804"/>
+        </g>
+        <g fill="none" stroke="#9DB08F" stroke-width="4" stroke-linecap="round">
+          <path d="M290 632 q50 -24 100 0 t100 0 t100 0 t100 0"/>
+          <path d="M920 632 q50 -24 100 0 t100 0 t100 0 t100 0"/>
+          <path d="M110 746 q64 -32 128 0 t128 0 t128 0 t128 0"/>
+          <path d="M980 746 q64 -32 128 0 t128 0 t128 0 t128 0"/>
+        </g>
+        <g fill="#4F6046" stroke="#3B4A35" stroke-width="2" stroke-linejoin="round">
+          <path d="M320 598 l10 -36 l10 36 z"/><path d="M730 598 l10 -36 l10 36 z"/><path d="M850 598 l10 -36 l10 36 z"/><path d="M1260 598 l10 -36 l10 36 z"/>
+          <path d="M164 686 l12 -46 l12 46 z"/><path d="M682 686 l12 -46 l12 46 z"/><path d="M894 686 l12 -46 l12 46 z"/><path d="M1412 686 l12 -46 l12 46 z"/>
+        </g>
+        <g fill="#FFF8EA" stroke="#6F8296" stroke-width="2"><rect x="708" y="600" width="18" height="22"/><path d="M712 600 v-18 q5 -10 10 0 v18 z"/><circle cx="717" cy="576" r="6"/><rect x="874" y="600" width="18" height="22"/><path d="M878 600 v-18 q5 -10 10 0 v18 z"/><circle cx="883" cy="576" r="6"/></g>
+        <!-- Fuentes -->
+        <ellipse cx="330" cy="846" rx="132" ry="30" fill="#A9B7C6" stroke="#6F8296" stroke-width="4"/>
+        <ellipse cx="330" cy="841" rx="106" ry="20" fill="#DCE5EC"/>
+        <rect x="322" y="804" width="16" height="38" fill="#D9B879" stroke="#9C7B3E" stroke-width="2"/>
+        <path class="sz-strahl" d="M330 808 C 322 772, 320 742, 330 708 C 340 742, 338 772, 330 808 Z" fill="#FFFFFF" opacity=".92"/>
+        <path class="sz-strahl s2" d="M326 812 Q 296 780 272 830 M334 812 Q 364 780 388 830" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+        <ellipse cx="1270" cy="846" rx="132" ry="30" fill="#A9B7C6" stroke="#6F8296" stroke-width="4"/>
+        <ellipse cx="1270" cy="841" rx="106" ry="20" fill="#DCE5EC"/>
+        <rect x="1262" y="804" width="16" height="38" fill="#D9B879" stroke="#9C7B3E" stroke-width="2"/>
+        <path class="sz-strahl s2" d="M1270 808 C 1262 772, 1260 742, 1270 708 C 1280 742, 1278 772, 1270 808 Z" fill="#FFFFFF" opacity=".92"/>
+        <path class="sz-strahl" d="M1266 812 Q 1236 780 1212 830 M1274 812 Q 1304 780 1328 830" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="schleier" aria-hidden="true"></div>
+  <canvas class="zm-partikel" id="zm-partikel" aria-hidden="true"></canvas>
+
+  <button class="ton-btn" id="ton-btn" aria-pressed="true" aria-label="Ton an oder aus">🔊</button>
+
+  <div class="zm-inhalt">
+    <div class="zm-kopf">
+      <p class="hero-vorspann">Unser Blog über den Film</p>
+      <h1>Mr. Peabody <span>&amp;</span> Sherman</h1>
+      <p class="hero-unter">Komm mit auf eine <span class="vokabel" data-es="viaje en el tiempo">Zeitreise</span>! Wähle ein Ziel.</p>
+    </div>
+
+    <!-- La máquina del tiempo (diseño original) -->
+    <div class="maschine-buehne" id="maschine-buehne">
+      <div class="maschine" id="maschine">
+        <div class="m-glow" aria-hidden="true"></div>
+        <!-- capa: antenas -->
+        <svg class="m-ebene" viewBox="0 0 400 440" aria-hidden="true">
+          <defs>
+            <linearGradient id="m-messing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F0D99B"/><stop offset=".5" stop-color="#C9A25A"/><stop offset="1" stop-color="#8E6D33"/></linearGradient>
+            <linearGradient id="m-stahl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7894A8"/><stop offset="1" stop-color="#3D5266"/></linearGradient>
+            <radialGradient id="m-glas" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#2C4252"/><stop offset="1" stop-color="#0C151D"/></radialGradient>
+            <radialGradient id="m-energie"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".25" stop-color="#C8FFFB"/><stop offset=".55" stop-color="#36C5C0"/><stop offset="1" stop-color="#36C5C0" stop-opacity="0"/></radialGradient>
+          </defs>
+          <path d="M114 64 L86 18 M286 64 L314 18" stroke="#8E6D33" stroke-width="7" stroke-linecap="round"/>
+          <circle class="m-birne" cx="84" cy="15" r="10"/>
+          <circle class="m-birne b2" cx="316" cy="15" r="10"/>
+        </svg>
+        <!-- capas que giran: engranajes laterales -->
+        <svg class="m-ebene m-dreh" id="m-rad-l" viewBox="4 242 96 96" style="left:1%;top:55%;width:24%;height:21.8182%" aria-hidden="true"><path fill="#6E8BA0" stroke="#2E4153" stroke-width="2.5" fill-rule="evenodd"/><circle cx="52" cy="290" r="11" fill="#2E4153"/></svg>
+        <svg class="m-ebene m-dreh" id="m-rad-r" viewBox="300 242 96 96" style="left:75%;top:55%;width:24%;height:21.8182%" aria-hidden="true"><path fill="#6E8BA0" stroke="#2E4153" stroke-width="2.5" fill-rule="evenodd"/><circle cx="348" cy="290" r="11" fill="#2E4153"/></svg>
+        <!-- capa: tubos, soporte e interior -->
+        <svg class="m-ebene" viewBox="0 0 400 440" aria-hidden="true">
+          <g fill="none" stroke-linecap="round">
+            <path d="M102 352 C 52 336, 22 262, 48 208 M298 352 C 348 336, 378 262, 352 208" stroke="#8E6D33" stroke-width="15"/>
+            <path d="M102 352 C 52 336, 22 262, 48 208 M298 352 C 348 336, 378 262, 352 208" stroke="#C9A25A" stroke-width="8"/>
+            <path class="m-rohr" d="M102 352 C 52 336, 22 262, 48 208 M298 352 C 348 336, 378 262, 352 208" stroke="#8FF5EE" stroke-width="4" stroke-dasharray="10 14"/>
+          </g>
+          <path d="M120 322 Q 200 398 280 322 L 304 356 H 96 Z" fill="url(#m-stahl)" stroke="#2E4153" stroke-width="4" stroke-linejoin="round"/>
+          <circle cx="200" cy="190" r="140" fill="#1E2B38"/>
+        </svg>
+        <!-- capa que gira: engranaje grande -->
+        <svg class="m-ebene m-dreh" id="m-zahnrad" viewBox="68 58 264 264" style="left:17%;top:13.1818%;width:66%;height:60%" aria-hidden="true"><path fill="#4A6478" stroke="#2E4153" stroke-width="2.5" fill-rule="evenodd"/></svg>
+        <!-- capa: anillo exterior con luces -->
+        <svg class="m-ebene" viewBox="0 0 400 440" aria-hidden="true">
+          <circle cx="200" cy="190" r="148" fill="none" stroke="url(#m-messing)" stroke-width="24"/>
+          <circle cx="200" cy="190" r="160" fill="none" stroke="#8E6D33" stroke-width="3"/>
+          <circle cx="200" cy="190" r="136" fill="none" stroke="#8E6D33" stroke-width="3"/>
+          <g id="m-nieten" fill="#F0D99B" stroke="#8E6D33" stroke-width="1"></g>
+          <g id="m-lampen" stroke="#2E4153" stroke-width="2"></g>
+        </svg>
+        <svg class="m-ebene m-lampenglanz" viewBox="0 0 400 440" aria-hidden="true"><g id="m-glanz" fill="#FFFFFF"></g></svg>
+        <!-- capa que gira: anillo interior -->
+        <svg class="m-ebene m-dreh" id="m-innenring" viewBox="94 84 212 212" style="left:23.5%;top:19.0909%;width:53%;height:48.1818%" aria-hidden="true">
+          <circle cx="200" cy="190" r="98" fill="none" stroke="#C9A25A" stroke-width="10"/>
+          <circle cx="200" cy="190" r="104" fill="none" stroke="#8E6D33" stroke-width="2"/>
+          <g id="m-striche" stroke="#E8CD8E" stroke-width="2" stroke-linecap="round"></g>
+        </svg>
+        <!-- capas: núcleo de energía -->
+        <svg class="m-ebene" viewBox="0 0 400 440" aria-hidden="true"><circle cx="200" cy="190" r="76" fill="url(#m-glas)" stroke="#8E6D33" stroke-width="6"/></svg>
+        <svg class="m-ebene m-glut" viewBox="124 114 152 152" style="left:31%;top:25.9091%;width:38%;height:34.5455%" aria-hidden="true"><circle cx="200" cy="190" r="74" fill="url(#m-energie)"/></svg>
+        <svg class="m-ebene m-dreh m-wirbel" id="m-wirbel" viewBox="134 124 132 132" style="left:33.5%;top:28.1818%;width:33%;height:30%" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" aria-hidden="true"></svg>
+        <!-- capa del frente: reflejo y consola -->
+        <svg class="m-ebene" viewBox="0 0 400 440" role="img" aria-label="Die Zeitmaschine">
+          <ellipse cx="176" cy="156" rx="24" ry="12" fill="#FFFFFF" opacity=".22" transform="rotate(-32 176 156)"/>
+          <circle cx="200" cy="190" r="70" fill="none" stroke="#E8CD8E" stroke-width="1.5" opacity=".6"/>
+          <path d="M66 352 H334 L358 428 H42 Z" fill="url(#m-stahl)" stroke="#2E4153" stroke-width="4" stroke-linejoin="round"/>
+          <rect x="62" y="344" width="276" height="12" rx="5" fill="url(#m-messing)" stroke="#8E6D33" stroke-width="2"/>
+          <rect x="146" y="364" width="108" height="34" rx="7" fill="#0C151D" stroke="#2E4153" stroke-width="3"/>
+          <text x="153" y="374" class="m-label">ZIEL</text>
+          <text id="m-jahr" class="m-jahr" x="200" y="391" text-anchor="middle">HEUTE</text>
+          <path d="M78 408 A24 24 0 0 1 126 408 Z" fill="#F2F6F7" stroke="#2E4153" stroke-width="3"/>
+          <path d="M85 402 L89 399 M102 387 V 392 M119 402 L115 399" stroke="#2E4153" stroke-width="2"/>
+          <polygon class="m-nadel" points="100,408 102,390 104,408" fill="#D6453D"/>
+          <circle cx="102" cy="408" r="4" fill="#2E4153"/>
+          <circle cx="300" cy="410" r="9" fill="#2E4153"/>
+          <g class="m-hebel"><rect x="297" y="380" width="6" height="30" rx="3" fill="#A9B7C6" stroke="#2E4153" stroke-width="1.5"/><circle cx="300" cy="378" r="9" fill="#D6453D" stroke="#2E4153" stroke-width="2"/></g>
+          <g id="m-leds"></g>
+          <rect x="64" y="426" width="56" height="12" rx="5" fill="#2E4153"/>
+          <rect x="280" y="426" width="56" height="12" rx="5" fill="#2E4153"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="zm-unten">
+      <p class="zm-status" id="zm-status" aria-live="polite">💤 Die Zeitmaschine schläft …</p>
+      <span class="zm-ort" id="zm-ort">📍 Labor · Heute</span>
+      <div class="zm-knoepfe" role="group" aria-label="Reiseziel wählen">
+        <button class="zm-knopf" data-ziel="aegypten" aria-pressed="false" disabled><span aria-hidden="true">🏺</span>Ägypten</button>
+        <button class="zm-knopf" data-ziel="troja" aria-pressed="false" disabled><span aria-hidden="true">🐴</span>Troja</button>
+        <button class="zm-knopf" data-ziel="florenz" aria-pressed="false" disabled><span aria-hidden="true">🎨</span>Florenz</button>
+        <button class="zm-knopf" data-ziel="frankreich" aria-pressed="false" disabled><span aria-hidden="true">👑</span>Frankreich</button>
+        <button class="zm-knopf" data-ziel="labor" aria-pressed="true" disabled><span aria-hidden="true">🔬</span>Labor</button>
+      </div>
+      <p class="zm-hilfe" id="zm-hilfe" hidden></p>
+      <a class="zm-weiter" href="#zusammenfassung">Weiter zum Blog <span>↓</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- ═════════════ NAVEGACIÓN ═════════════ -->
+<nav class="zeitnav" aria-label="Stationen">
+  <ul>
+    <li><a href="#zusammenfassung"><span class="nr">1</span>Zusammenfassung</a></li>
+    <li><a href="#rezension"><span class="nr">2</span>Rezension</a></li>
+    <li><a href="#figuren"><span class="nr">3</span>Figuren</a></li>
+    <li><a href="#tagesablauf"><span class="nr">4</span>Tagesablauf</a></li>
+    <li><a href="#quiz"><span class="nr">5</span>Quiz</a></li>
+    <li><a href="#spiele"><span class="nr">6</span>Spiele</a></li>
+    <li><a href="#team"><span class="nr">7</span>Team</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- ═════════════ 1. RESUMEN ═════════════ -->
+  <section class="station" id="zusammenfassung">
+    <div class="station-kopf zeige">
+      <span class="station-nr">Station 1</span>
+      <h2>Zusammenfassung</h2>
+      <p class="intro">Was passiert im Film? Hier ist die Geschichte.</p>
+      <p class="vokabel-tipp">💡 Tipp: Klick auf die <span class="vokabel" data-es="palabras marcadas">markierten Wörter</span>. Dann siehst du die Übersetzung auf Spanisch.</p><br>
+      <span class="lesezeit" data-text="text-zusammenfassung">⏱ Lesezeit: –</span>
+    </div>
+
+    <div class="fakten">
+      <div class="fakt zeige"><span class="wert" data-zahl="2014" data-von="1900">2014</span><span class="etikett">Jahr</span></div>
+      <div class="fakt zeige"><span class="wert">Rob Minkoff</span><span class="etikett">Regie</span></div>
+      <div class="fakt zeige"><span class="wert"><span data-zahl="92">92</span> Minuten</span><span class="etikett">Länge</span></div>
+      <div class="fakt zeige"><span class="wert">DreamWorks Animation</span><span class="etikett">Studio</span></div>
+      <div class="fakt zeige"><span class="wert">Animation · Komödie</span><span class="etikett">Genre</span></div>
+    </div>
+
+    <div class="karte zeige">
+      <div class="mit-bild">
+        <!-- FOTO: sube "poster.jpg" -->
+        <figure class="foto frei poster" data-foto="poster" data-alt="Filmplakat"></figure>
+        <div class="text-spalte">
+          <div class="text einklappbar" id="text-zusammenfassung">
+            <!-- TEXTO DEL GRUPO: Resumen (tal cual) -->
+            <p>Der Film hat in Frankreich begonnen, hier waren Sheram und Peabody, als die Französische Revolution angefangen hat. Danach sind sie in die Gegenwart zurückgekehrt. Am nächsten Tag ist Sherman zur Schule gegangen und Penny hat im gestört, weil sie eifersüchtig auf Shermans Wissen war, also hat Sherman sie gebissen. Deshalb ist Peabody zur Schule gegangen und einen Regierungsvertreterin hat ihm gesagt, dass die Regierung ihn Sherman wegnehmen wollte. Am Abend hat Mr.Peabody Pennys Eltern zu Hause eingeladen, um das Problem zu lösen. Da haben Sherman und Penny gesprochen, und Sherman hat Penny die Zeitmaschine gezeigt. Sie sind in das alte Ägypten gereist und Penny wollte da bleiben, so hat Sherman Mr.Peabody benachrichtigt. Sie hat Penny überzeugt, und sie sind gegangen. Aber die Zeitmaschine hatte keinen Strom, deshalb haben sie Da Vinci um Hilfe gebeten. Als sie nach Hause gegangen sind, ist ein schwarzes Loch erschienen, so sind sie im Trojanischen Krieg angekommen. Sie hatten einen Unfall und Mr.Peabody ist gestorben. Penny und Sherman sind im Abendessen zurückgekehrt und sie hatten andere Mr.Peabody getroffen. Er hat ihnen geholfen, eine Loch im Himmel erschienen und viele historische Persönlichkeiten haben aufgetaucht. Sie haben mit historischen Wissenschaftlern das Problem gelöst.</p>
+          </div>
+          <button class="mehr-btn" data-text="text-zusammenfassung">Mehr lesen ▾</button>
+          <p class="autor" data-autor="zusammenfassung"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="unterkopf zeige">
+      <h3>🕰️ Die <span class="vokabel" data-es="destinos del viaje">Reiseziele</span></h3>
+      <p>Wohin reisen sie? Klick auf eine Karte!</p>
+    </div>
+    <div class="reiseziele">
+      <article class="ziel zeige">
+        <button class="ziel-kopf" aria-expanded="false">
+          <span class="pfeil">▾</span><span class="emoji">👑</span>
+          <span class="ort">Paris</span><span class="zeit">1789 · Französische Revolution</span>
+        </button>
+        <div class="ziel-text"><div><div class="innen">
+          <figure class="foto frei" data-foto="paris" data-alt="Paris"></figure>
+          <p>Hier beginnt der Film. In Frankreich gibt es eine Revolution. Sherman und Mr. Peabody treffen Maria Antonieta.</p>
+        </div></div></div>
+      </article>
+      <article class="ziel zeige">
+        <button class="ziel-kopf" aria-expanded="false">
+          <span class="pfeil">▾</span><span class="emoji">🏺</span>
+          <span class="ort">Ägypten</span><span class="zeit">Das alte Ägypten</span>
+        </button>
+        <div class="ziel-text"><div><div class="innen">
+          <figure class="foto frei" data-foto="aegypten" data-alt="Ägypten"></figure>
+          <p>Sherman zeigt Penny die Zeitmaschine. Sie reisen ins alte Ägypten. Aber Penny will dort bleiben!</p>
+        </div></div></div>
+      </article>
+      <article class="ziel zeige">
+        <button class="ziel-kopf" aria-expanded="false">
+          <span class="pfeil">▾</span><span class="emoji">🎨</span>
+          <span class="ort">Florenz</span><span class="zeit">Die Renaissance</span>
+        </button>
+        <div class="ziel-text"><div><div class="innen">
+          <figure class="foto frei" data-foto="florenz" data-alt="Florenz"></figure>
+          <p>Die Zeitmaschine hat keinen Strom. Wer hilft? Leonardo da Vinci!</p>
+          <a class="ziel-link" href="#davinci">Lies: Ein besonderer Tag mit Da Vinci ⟶</a>
+        </div></div></div>
+      </article>
+      <article class="ziel zeige">
+        <button class="ziel-kopf" aria-expanded="false">
+          <span class="pfeil">▾</span><span class="emoji">🐴</span>
+          <span class="ort">Troja</span><span class="zeit">Der Trojanische Krieg</span>
+        </button>
+        <div class="ziel-text"><div><div class="innen">
+          <figure class="foto frei" data-foto="troja" data-alt="Troja"></figure>
+          <p>Ein schwarzes Loch! Plötzlich sind sie im Trojanischen Krieg. Hier treffen sie Agamenón.</p>
+        </div></div></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═════════════ 2. RESEÑA ═════════════ -->
+  <section class="station" id="rezension">
+    <div class="station-kopf zeige">
+      <span class="station-nr">Station 2</span>
+      <h2>Unsere Rezension</h2>
+      <p class="intro">Wie finden wir den Film? Hier ist unsere Meinung.</p>
+      <span class="lesezeit" data-text="text-rezension">⏱ Lesezeit: –</span>
+    </div>
+
+    <div class="karte zeige">
+      <div class="bewertung-kopf">
+        <strong>Unsere <span class="vokabel" data-es="calificación">Bewertung</span>:</strong>
+        <div class="sterne-anzeige" data-wert="3.6"></div>
+        <span class="bewertung-zahl">3,6 / 5</span>
+      </div>
+      <div class="empfehlung">
+        <span>👨‍👩‍👧 Gut für Familien</span><span>🧒 Besonders für Kinder</span><span>📚 Man lernt Geschichte</span>
+      </div>
+
+      <div class="text einklappbar" id="text-rezension">
+        <!-- TEXTO DEL GRUPO: Opinión / reseña (tal cual) -->
+        <p>Der Film hat einen schönen Animationsstil, er ist flieẞend und karikaturesk. Die Thematik von dem Film ist “Zeitreisen”, die Charaktere reisen in verschiedene Epochen, z.B.: Altes Ägypten und die Renaissancezeit. Sie treffen sich mit historischen Figuren wie z.B: Tutankamón und Da Vinci.</p>
+        <p>Die Botschaft von “Mr.Peabody &amp; Sherman” hat ethische Werte: “Es gibt kein spezielles Rezept zum Vater sein, du musst nur deinen Sohn lieben und ihn schützen”.</p>
+        <p>Wir finden interessant, wie die Aktionen von den Charakteren die Zeitlinie verändern. Außerdem ist interessant, wie der Film stellt verschiedene Epochen dar, ihre Charaktere haben besondere Persönlichkeiten.</p>
+        <p>Der Humor und die Persönlichkeit von den Figuren gefallen uns, aber Penny und die Direktorin gefallen uns nicht so gut. Die Freundschaft zwischen Penny und Sherman hat am Ende keinen Sinn, sie braucht mehr Entwicklung. Das Ende war vorhersehbar und einfach.</p>
+        <p>Wie geben dem Film 3,6 von 5 Sternen. Der Film ist gut für die Familie oder mit Freunden, aber das ist nichts besonderes spannen. Der Film ist besonders für Kinder, hat Familienwerte und einen interessante Science Fiction, die Kinder können etwas über Geschichte und Wissenschaft lernen. Deshalb empfehlen wir diesem Publikum den Film.</p>
+      </div>
+      <button class="mehr-btn" data-text="text-rezension">Mehr lesen ▾</button>
+      <p class="autor" data-autor="rezension"></p>
+
+      <div class="wichtig">
+        <h3>📌 Das Wichtigste</h3>
+        <!-- Frases tomadas tal cual de su reseña -->
+        <div class="pro-contra">
+          <div class="pc pro">
+            <h4>👍 Das gefällt uns</h4>
+            <ul>
+              <li>Der Film hat einen schönen Animationsstil, er ist flieẞend und karikaturesk</li>
+              <li>Der Humor und die Persönlichkeit von den Figuren gefallen uns</li>
+              <li>Wir finden interessant, wie die Aktionen von den Charakteren die Zeitlinie verändern</li>
+              <li>Die Kinder können etwas über Geschichte und Wissenschaft lernen</li>
+            </ul>
+          </div>
+          <div class="pc contra">
+            <h4>👎 Das gefällt uns nicht so</h4>
+            <ul>
+              <li>Penny und die Direktorin gefallen uns nicht so gut</li>
+              <li>Die Freundschaft zwischen Penny und Sherman hat am Ende keinen Sinn, sie braucht mehr Entwicklung</li>
+              <li>Das Ende war vorhersehbar und einfach</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <blockquote class="botschaft zeige">
+      <span class="botschaft-label">💬 Die Botschaft</span>
+      <p>Es gibt kein spezielles Rezept zum Vater sein, du musst nur deinen Sohn lieben und ihn schützen.</p>
+    </blockquote>
+
+    <div class="du-bewertest zeige">
+      <h3>Und du? Wie findest du den Film?</h3>
+      <div class="klick-sterne" id="klick-sterne" role="radiogroup" aria-label="Deine Bewertung"></div>
+      <p id="bewertung-nachricht" aria-live="polite">Klick auf die Sterne!</p>
+    </div>
+  </section>
+
+  <!-- ═════════════ 3. PERSONAJES ═════════════ -->
+  <section class="station" id="figuren">
+    <div class="station-kopf zeige">
+      <span class="station-nr">Station 3</span>
+      <h2>Die Figuren</h2>
+      <p class="intro">Wer ist wer? Hier beschreiben wir die Figuren aus dem Film.</p>
+    </div>
+
+    <div class="unterkopf zeige">
+      <h3>⭐ Die <span class="vokabel" data-es="personajes principales">Hauptfiguren</span></h3>
+      <p>Sie sind sehr wichtig für die Geschichte.</p>
+    </div>
+    <div class="hauptfiguren" id="hauptfiguren"></div>
+
+    <div class="unterkopf zeige">
+      <h3>🎭 Die <span class="vokabel" data-es="personajes secundarios">Nebenfiguren</span></h3>
+      <p>Sie sind auch im Film. Klick auf eine Karte – dann dreht sie sich um!</p>
+    </div>
+    <div class="nebenfiguren" id="nebenfiguren"></div>
+  </section>
+
+  <!-- ═════════════ 4. RUTINAS ═════════════ -->
+  <section class="station" id="tagesablauf">
+    <div class="station-kopf zeige">
+      <span class="station-nr">Station 4</span>
+      <h2>Der <span class="vokabel" data-es="rutina diaria">Tagesablauf</span></h2>
+      <p class="intro">Wie sieht ein normaler Tag aus? Klick auf eine Figur und reise durch den Tag.</p>
+    </div>
+    <div class="routinen" id="routinen"></div>
+
+    <div class="unterkopf zeige">
+      <h3>⏰ Wer macht was?</h3>
+      <p>Beweg den <span class="vokabel" data-es="control deslizante">Regler</span>. Was machen die drei Figuren zur gleichen Zeit?</p>
+    </div>
+    <div class="vergleich zeige">
+      <div class="himmel" id="v-himmel">
+        <span class="himmelskoerper" id="v-koerper">☀️</span>
+        <div class="horizont"></div>
+        <div class="uhrzeit" id="v-zeit">12:00</div>
+      </div>
+      <div class="v-steuerung">
+        <div class="v-zeile">
+          <input type="range" id="v-regler" min="10" max="44" step="1" value="24" aria-label="Uhrzeit">
+          <button class="btn-klein" id="v-abspielen">▶ Abspielen</button>
+        </div>
+        <div class="v-skala"><span>5:00</span><span>22:00</span></div>
+      </div>
+      <div class="v-spalten" id="v-spalten"></div>
+    </div>
+
+    <!-- Día especial con Da Vinci -->
+    <article class="skizzenbuch zeige" id="davinci">
+      <span class="signatur" aria-hidden="true">Leonardo</span>
+      <span class="sb-label">🎨 Florenz · Renaissance</span>
+      <h3 class="sb-titel">Ein besonderer Tag</h3>
+      <p class="sb-unter">mit Leonardo da Vinci</p>
+      <p class="sb-info">Wusstest du? Da Vinci hat oft in <span class="vokabel" data-es="escritura en espejo">Spiegelschrift</span> geschrieben. 🪞</p>
+      <div class="sb-inhalt">
+        <!-- FOTO: sube "davinci.jpg" -->
+        <figure class="foto frei sb-bild" data-foto="davinci" data-alt="Leonardo da Vinci"></figure>
+        <div class="sb-text-rahmen">
+          <div class="sb-text gespiegelt" id="davinci-text">
+            <!-- TEXTO DEL GRUPO: Da Vinci (tal cual) -->
+            <p>An einem normalen Tag hat Da Vinci versucht, ein Bild von Mona Lisa zu malen, aber sie war gelangweilt und sie hat nicht lächeln wollen. Dann sind Peabody, Sherman und Penny angekommen, und Da Vinci ist glücklicher geworden. Sie haben Hilfen mit der Zeitmaschine, weil sie keinen Strom hatten. Also haben Da Vinci und Mr.Peabody einen Plan gemacht, um sie zu reparieren. In diesem Moment war Peabody verärgert, weil Sherman ihm nicht gehorcht hat, so hat Da Vinci ihm gesagt, dass er die Kontrolle über alles lässt los und Sherman trei sein lässt. Das ist er überrascht, weil er sieht, dass Sherman sein Flugzeug fliegt. Als sie weggegangen ist, fühlte Da Vinci sich zufrieden, aber er erschreckt sich, weil er seinen Jungs-Maschine gesehen hat.</p>
+          </div>
+        </div>
+      </div>
+      <div class="sb-steuerung">
+        <button class="sb-btn" id="spiegel-btn">🪞 Spiegel benutzen</button>
+        <span class="sb-hinweis" id="spiegel-hinweis">Der Text ist in Spiegelschrift. Benutz den Spiegel!</span>
+      </div>
+      <p class="autor" data-autor="davinci"></p>
+    </article>
+  </section>
+
+  <!-- ═════════════ 5. QUIZ ═════════════ -->
+  <section class="station" id="quiz">
+    <div class="station-kopf zeige">
+      <span class="station-nr">Station 5</span>
+      <h2>Quiz: Was weißt du?</h2>
+      <p class="intro">Jede Runde hat 5 Fragen. In jeder Runde kommen neue Fragen!</p>
+    </div>
+    <div class="quiz-box zeige" id="quiz-box" aria-live="polite"></div>
+  </section>
+
+  <!-- ═════════════ 6. JUEGOS ═════════════ -->
+  <section class="station" id="spiele">
+    <div class="station-kopf zeige">
+      <span class="station-nr">Station 6</span>
+      <h2>Spiele</h2>
+      <p class="intro">Noch mehr Spaß! Hier sind zwei kleine Spiele.</p>
+    </div>
+    <div class="spiele-grid">
+      <div class="spiel spiel-dunkel zeige" id="wer-bin-ich">
+        <h3>🕵️ Wer bin ich?</h3>
+        <p class="anleitung">Lies die Tipps. Wer ist das? Mit wenigen Tipps bekommst du mehr Punkte!</p>
+        <div class="punkte-leiste"><span id="wbi-runde">Figur 1</span><span id="wbi-punkte">⭐ Punkte: 0</span></div>
+        <ul class="tipps" id="wbi-tipps"></ul>
+        <div class="namen" id="wbi-namen"></div>
+        <div class="wbi-ergebnis" id="wbi-ergebnis" aria-live="polite"></div>
+        <div class="wbi-aktionen">
+          <button class="btn-klein" id="wbi-mehr">💡 Noch ein Tipp</button>
+          <button class="btn-klein" id="wbi-weiter" hidden>Nächste Figur ⟶</button>
+        </div>
+      </div>
+
+      <div class="spiel spiel-hell zeige" id="ordnung">
+        <h3>🧩 Was passiert zuerst?</h3>
+        <p class="anleitung">Was passiert zuerst? Was passiert dann? Klick die Karten in der richtigen Reihenfolge.</p>
+        <div class="punkte-leiste" id="o-status"></div>
+        <div class="ordnung-liste" id="ordnung-liste"></div>
+        <div class="o-ende" id="o-ende" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════════ 7. EQUIPO ═════════════ -->
+  <section class="station" id="team">
+    <div class="station-kopf zeige">
+      <span class="station-nr">Station 7</span>
+      <h2>Unser Team</h2>
+      <p class="intro">Wir sind eine Gruppe aus vier Personen. Wir haben diesen Blog zusammen gemacht.</p>
+    </div>
+    <div class="team" id="team-liste"></div>
+  </section>
+
+</main>
+
+<footer>
+  <h3>Danke fürs Lesen! 🐶</h3>
+  <p id="footer-info"></p>
+  <button class="zurueck-btn" id="zurueck-btn">⤴ Zurück zum Anfang</button>
+  <p class="klein">Ein Projekt für die Uni. Der Film gehört DreamWorks Animation.</p>
+</footer>
+
+<button id="zeitsprung" aria-label="Zeitsprung zu einer zufälligen Station">⏳<span class="tipp">Zeitsprung!</span></button>
+
+<div id="edit-badge" hidden>
+  <button aria-label="Cerrar">✕</button>
+  ✏️ <b>Modo edición.</b> Antes de entregar pon <b>MODO_EDICION = false</b> (ZONA 1).
+</div>
+
+<!-- Ventana de la rutina diaria -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+    <button class="modal-zu" id="modal-zu" aria-label="Schließen">✕</button>
+    <div class="himmel" id="himmel">
+      <span class="himmelskoerper" id="koerper">☀️</span>
+      <div class="horizont"></div>
+      <div class="uhrzeit" id="uhrzeit">07:00</div>
+      <div class="bis" id="bis"></div>
+    </div>
+    <div class="modal-text">
+      <p class="modal-rolle">Tagesablauf</p>
+      <h3 id="modal-name"></h3>
+      <p class="schritt-titel" id="schritt-titel"></p>
+      <p class="aktivitaet" id="aktivitaet" aria-live="polite"></p>
+      <input type="range" id="tag-regler" min="0" max="5" step="1" value="0" aria-label="Tageszeit">
+      <div class="zeit-chips" id="zeit-chips"></div>
+      <div class="modal-steuerung">
+        <button id="schritt-zurueck" aria-label="Früher">◀</button>
+        <button id="abspielen">▶ Tag abspielen</button>
+        <button id="schritt-weiter" aria-label="Später">▶</button>
+      </div>
+      <div class="notiz" id="notiz" hidden><b>💛 Und noch etwas:</b> <span id="notiz-text"></span></div>
+      <button class="volltext-btn" id="volltext-btn">📖 Ganzen Text lesen</button>
+      <div class="volltext text" id="volltext"></div>
+      <p class="autor" id="modal-autor"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   ✏️ ZONA 1 — DATOS DEL GRUPO  (esto sí lo tienes que llenar)
+   ══════════════════════════════════════════════════════════════ */
+
+// Cambia a false cuando termines: se esconden los recuadros vacíos y las ayudas.
+const MODO_EDICION = true;
+
+// ✏️ Los 4 integrantes del grupo (deja las comillas)
+const TEAM = [
+  "Jesus Manrique",
+  "Zahara Montero",
+  "Juana Pico",
+  "Daniel Barrera"
+];
+
+// ✏️ Curso y universidad (aparecen al final de la página)
+const KURS = "Intensivkurs Deutsch I - Internationalisierung";
+const UNIVERSIDAD = "Universidad Nacional de Colombia";
+
+// ✏️ ¿Quién escribió cada texto? Escribe el nombre tal como está en TEAM.
+//    Si lo escribieron dos personas: "Ana y Luis"
+const AUTOREN = {
+  zusammenfassung: "Juana Pico und Daniel Barrera",   // Resumen
+  rezension:       "Jesus Manrique und Zahara Montero",   // Reseña / opinión
+  peabody:         "Jesus Manrique",   // Descripción de Mr. Peabody
+  sherman:         "Zahara Montero",   // Descripción de Sherman
+  penny:           "Daniel Barrera",   // Descripción de Penny
+  maria:           "Juana Pico",   // Descripción de Maria Antonieta
+  agamenon:        "Juana Pico",   // Descripción de Agamenón
+  einstein:        "Juana Pico",   // Descripción de Albert Einstein
+  rutina_peabody:  "Zahara Montero",   // Rutina de Mr. Peabody
+  rutina_sherman:  "Juana Pico",   // Rutina de Sherman
+  rutina_penny:    "Jesus Manrique",   // Rutina de Penny
+  davinci:         "Daniel Barrera"    // Día especial con Da Vinci
+};
+
+/* ══════════════════════════════════════════════════════════════
+   ZONA 2 — PERSONAJES Y RUTINAS (los textos del grupo ya están)
+   ══════════════════════════════════════════════════════════════ */
+const FIGUREN = [
+  {
+    id: "peabody", name: "Mr. Peabody", typ: "haupt", farbe: "#c93c34",
+    rolle: "Der kluge Hund",
+    steckbrief: [["🎂 Alter", "12 Jahre"], ["📏 Größe", "ca. 1,20 m"], ["👀 Augen", "grün"], ["🏠 Wohnort", "New York (Penthouse)"], ["💼 Beruf", "Wissenschaftler, Historiker, Erfinder"], ["❤️ Hobbys", "Yoga, Fechten, Zumba, Kampfsport"]],
+    text: [
+      "Das ist Mr.Peabody, er ist 12 Jahre alt, er ist ein sehr intelligenter, weiẞer Hund. Seine Augen sind grün, er ist circa 1.20m groẞ. Er trägt immer eine rote Fliege und eine groẞe schwarze Brille. Mr.Peabody ist ruhig, elegant und logisch, er ist Wissenschaftler, Historiker und Erfinder im Film. Er wohnt in New York und hat ein Penthouse. Dort wohnt er zusammen mit seinem Sohn, er ist der Adoptivvater von Sherman. Er arbeitet zu Hause. Seine Hobbys sind Yoga machen, Fechten, Zumba machen und Kampfsport. Er liebt Gourmet-Essen.",
+      "Wir mögen Mr. Peabody, denn er ist sehr intelligent und er ist ein besserer Vater als ein Vater aus Lateinamerika."
+    ],
+    wirMoegen: true, pronomen: "ihn",
+    tagesablauf: [
+      { zeit: "05:30", icon: "🧘", kurz: "Aufstehen und Yoga", text: "Um 5:30 Uhr steht Mr.Peabody auf, dann macht er Yoga und streckt Übungen, danach organisiert er seine Ideen." },
+      { zeit: "06:00", icon: "🍳", kurz: "Frühstück mit Sherman", text: "Um 6:00 Uhr kocht er gesundes Frühstück z.B: viel Obst, Karottesaft, Eier oder Müsli mit Milch, während Mr.Peabody frühstücke mit Sherman erzählt er Sherman die merkwürdige Fakten, dann liest er einen Zeitung und er sucht Wissenschaftliche Informationen. Mr.Peabody hilft Sherman, sich auf die Schule vorzubereiten. Manchmal empfindet er Schuld, kein guter Vater zu sein." },
+      { zeit: "08:00", bis: "13:00", icon: "🔧", kurz: "Arbeit an Erfindungen", text: "Von 8:00 bis 13:00 Uhr arbeitet er an seinen Erfindungen, dann recherchiert er neue Technologien;" },
+      { zeit: "10:00", icon: "🕰️", kurz: "Arbeit an der Zeitmaschine", text: "um 10:00 Uhr macht er Wartungsarbeiten in seiner Zeitmaschine." },
+      { zeit: "11:30", icon: "💡", kurz: "Neue Projekte erfinden", text: "Um 11:30 Uhr arbeitet er und erfindet er Projekte in alternativen Energien." },
+      { zeit: "13:30", icon: "🍽️", kurz: "Mittagessen", text: "Er isst um 13:30 Uhr zu Mittag, meistens liest er gerne Gastronomie Bücher." },
+      { zeit: "14:00", bis: "15:30", icon: "📚", kurz: "Bücher lesen", text: "Von 14:00 bis 15:30 Uhr liest er Geschichte, Philosophie oder Wissenschaftsbücher." },
+      { zeit: "16:00", icon: "📝", kurz: "Hausaufgaben mit Sherman", text: "Um 16:00 Uhr verbringt er Zeit mit Sherman, hilft ihm bei den Hausaufgaben und spricht er mit ihm." },
+      { zeit: "19:00", icon: "🍲", kurz: "Abendessen", text: "Um 19:00 Uhr essen sie zu Abend, dann sprechen sie darüber, wie ihr Tag verlaufen ist." },
+      { zeit: "20:00", icon: "🗓️", kurz: "Den nächsten Tag planen", text: "Um 20:00 Uhr organisiert er seine Aktivitäten für den nächsten Tag." },
+      { zeit: "20:30", icon: "😴", kurz: "Schlafen gehen", text: "Zum Schluss gehen er und Sherman um 20:30 Uhr  schlafen." }
+    ],
+    notiz: "Mr. Peabody ist ein sehr fürsorglicher Vater. Er kümmert sich um Shermans Sicherheit sein Wohlbefinden.  Er bringt ihm gute Manieren bei und erklärt ihm Schulthemen, damit er gute Noten bekommt."
+  },
+  {
+    id: "sherman", name: "Sherman", typ: "haupt", farbe: "#23867a",
+    rolle: "Der Sohn von Mr. Peabody",
+    steckbrief: [["📛 Ganzer Name", "Sherman J. Peabody"], ["🎂 Alter", "7 Jahre"], ["💇 Haare", "rot"], ["👀 Augen", "braun"], ["🏠 Wohnort", "New York"], ["❤️ Hobbys", "Lernen, Geschichte, Zeitreisen"]],
+    text: [
+      "Sherman ist ein Junge mit 7 Jahren in dem Film “Mr. Peabody und Sherman”. Er hat rote Haare, braune Augen und eine runde Brille. Er ist klein und trägt ein weiẞes T-shirt, schwarze Shorts, Turnschuhe und eine runde Brille. Er ist klug, neugierig, freundlich und lustig. Manchmal ist er frech.",
+      "Er ist ein Schüler und arbeitet nicht. Er wohnt mit Mr. Peabody in New York. Mr.Peabody ist sein Vater und Penny ist seine Freundin. Sherman lernt gern und mag Geschichte. Er reist auch gern mit Mr. Peabody durch die Zeit. Im Film besuchen sie verschiedene historische Zeiten und erleben viele Abenteuer.",
+      "Wir mögen Sherman, weil er klug, lustig und freundlich ist. Seine Lieblingsfarbe und Lieblingsessen sind nicht bekannt."
+    ],
+    wirMoegen: true, pronomen: "ihn",
+    tagesablauf: [
+      { zeit: "07:00", icon: "🛁", kurz: "Aufstehen und baden", text: "Um 7:00 Uhr steht Sherman auf, er badet sich und putzt sich die Zähne. Dann räumt er sein Zimmer auf." },
+      { zeit: "07:30", icon: "🥣", kurz: "Frühstück mit Mr. Peabody", text: "Um 7:30 Uhr hat er Frühstück mit Mr. Peabody, sie essen normalerweise viel Obst, Karottesaft, Eier oder Müsli, während sie frühstücken, erzählt Mr. Peabody ihm die merkwürdigen Fakten." },
+      { zeit: "08:00", icon: "🎒", kurz: "Zur Schule gehen", text: "Um 8:00 Uhr bereitet Sherman seine Tasche vor und geht sehr begeistert zur Schule." },
+      { zeit: "08:30", bis: "12:00", icon: "🏫", kurz: "Unterricht", text: "Danach zwischen 8:30 Uhr  und 12:00 Uhr hat er Unterricht, er antwortet auf die Fragen vom Lehrer mit viel Emotion, er mag sein Wissen mit seinen Kumpels teilen." },
+      { zeit: "12:00", icon: "🥪", kurz: "Mittagessen", text: "Um 12:00 Uhr hat er das Mittagessen, er isst kleine Karotten, Apfelsaft und Thunfisch-Sandwich. Zum Mittagessen stört Penny ihn, sie sagt ihm, er ist ein Hund und er fühlt sich schlecht." },
+      { zeit: "12:30", icon: "😄", kurz: "Spielen mit Freunden", text: "Dann um 12:30 Uhr spielt und redet er mit seinen Kumpels." },
+      { zeit: "15:00", icon: "🏠", kurz: "Nach Hause kommen", text: "Danach um 3:00 Uhr kommt Sherman nach Hause zurück" },
+      { zeit: "16:00", bis: "19:00", icon: "📖", kurz: "Lernen und Zeitreisen", text: "und zwischen 4:00 Uhr und 7:00 Uhr lernt er neuen Fakten, er liest Bücher, lernt Geschichte und Mathematik, redet über Wissenschaft mit Mr.Peabody, und manchmal reist er durch die Zeit mit Mr.Peabody." },
+      { zeit: "19:00", icon: "🍽️", kurz: "Abendessen", text: "Um 7:00 Uhr hat er das Abendessen, später putzt er sich die Zähne und zieht seinen Pyjama an." },
+      { zeit: "20:30", icon: "😴", kurz: "Schlafen", text: "Zum Schluss schläft Sherman um 8:30 Uhr ein." }
+    ]
+  },
+  {
+    id: "penny", name: "Penny", typ: "haupt", farbe: "#c2527f",
+    rolle: "Die Schulkollegin von Sherman",
+    steckbrief: [["📛 Ganzer Name", "Penny Peterson"], ["🎂 Alter", "7 Jahre"], ["📏 Größe", "ca. 1,23 m"], ["💇 Haare", "blond"], ["👀 Augen", "blau"], ["🏠 Wohnort", "New York"], ["🎨 Lieblingsfarbe", "Rosa? (vielleicht)"]],
+    text: [
+      "Das ist Penny. Sie ist ein Mädchen und ist 7 Jahre alt. Sie hat blondes Haar, blaue und groẞe Augen und weiẞe Haut. Sie ist ein junges Mädchen und sie ist klein, sie ist circa 1.23m groẞ, gröẞer als Sherman und Mr.Peabody. Sie trägt viele Kleider den Film entlang. Zuerst Schuluniform, dann trägt sie griechische und ägyptische Tuniken.",
+      "Im Film ist Penny unhöflich und arrogant denn sie ist eifersüchtig auf Shermans intelligenz und Shermans Geschichtswissen. Später wird sie mutiger, freundlicher und empatisurer, und auch wird sie unarrogent. Im Film ist Penny eine Schulkollegin von Sherman.",
+      "Wir mögen wie Penny nicht, denn sie ist sehr wirdlich mit Sherman und wir mögen nicht die eingebildete Haltung. Sie wohnt mit ihren Eltern in NYC und ihre Schule ist auch in NYC. Der Film sagt nicht über Pennys Lieblingsfarbe oder ihr Lieblingsessen, aber sie trägt ein rosa Kleid, so vielleicht ist Rosa ihre Lieblingsfarbe."
+    ],
+    wirMoegen: false, pronomen: "sie",
+    tagesablauf: [
+      { zeit: "06:00", icon: "🛁", kurz: "Aufstehen und baden", text: "Um 6:00 Uhr steht Penny auf, danach badet sie und zieht schöne Kleidung an. Dann isst sie Frühstück mit ihren Eltern." },
+      { zeit: "07:00", icon: "🏐", kurz: "Schule und Volleyball", text: "Um 7:00 Uhr geht sie in die Schule, dort trifft sie ihre Freundinnen und spielt Volleyball. Im Unterricht belästigt sie gern Sherman, weil er ihr Konkurrenz ist, sie beneidet ihn." },
+      { zeit: "13:00", icon: "🎻", kurz: "Geige und Bibliothek", text: "Am Nachmittag um 1:00 Uhr geht sie zum Geigenunterricht, sie spielt sehr gut die Geige. Danach geht sie in die Bibliothek, dort macht sie ihre Hausaufgaben und lernt viel, weil sie die beste in der Klasse sein möchte." },
+      { zeit: "17:00", icon: "🎨", kurz: "Zu Hause: lesen oder malen", text: "Um 5:00 Uhr geht sie nach Hause zurück, vor dem Abendessen liest sie meistens ein Buch oder malt ein Bild." },
+      { zeit: "19:00", icon: "🍽️", kurz: "Abendessen und Französisch", text: "Um 7:00 Uhr isst sie mit ihren Eltern zu Abend und erzählt von ihrem Tag. Danach lernt sie Französisch, weil sie nach Frankreich reisen will." },
+      { zeit: "21:00", icon: "😴", kurz: "Schlafen", text: "Um 9:00 Uhr geht sie schlafen." }
+    ]
+  },
+  {
+    id: "maria", name: "Maria Antonieta", typ: "neben", farbe: "#4f6fb3",
+    rolle: "Die Königin",
+    steckbrief: [["🎂 Alter", "34 Jahre"], ["💇 Haare", "weiß"], ["👀 Augen", "grün"], ["🏠 Wohnort", "Frankreich"], ["🍰 Isst gern", "Kuchen"]],
+    text: ["Maria Antonieta ist 34 Jahre alt und sie ist die Königin von Österreich. Sie hat weiẞe Haare, grüne Augen, eine groẞe Frisur und einen Muttermal. Sie ist gröẞer als Sherman und Mr. Peabody. Sie trägt einen groẞes blaues und weiẞes Kleid und Schmucke in ihren Haaren. Sie wohnt in Frankreich und sie isst kuchen gern."]
+  },
+  {
+    id: "agamenon", name: "Agamenón", typ: "neben", farbe: "#b0742a",
+    rolle: "Griechischer Held",
+    steckbrief: [["👑 Titel", "König und Kommandant"], ["💇 Haare", "braun"], ["👀 Augen", "braun"], ["🏠 Wohnort", "Griechenland"]],
+    text: ["Agamenón ist ein griechischer Held, König von Micenas und Kommandant der griechischen Armee. Er hat braune Haare, braunen Augen und ist sehr stark und groẞ. Er trägt eine rote und goldgelbe griechische Rüstung. Er wohnt in Griechenland und hat Freunde in seiner Armee."]
+  },
+  {
+    id: "einstein", name: "Albert Einstein", typ: "neben", farbe: "#6b6b7b",
+    rolle: "Der Physiker",
+    steckbrief: [["💼 Beruf", "Physiker, Mathematiker"], ["💇 Haare", "weiß"], ["👀 Augen", "braun"], ["👔 Kleidung", "grauer Anzug"]],
+    text: ["Albert Einstein ist Physiker, Mathematiker, Diplomat und Lehrer. Er hat wieẞer Haare, braunen Augen und einen groẞen Schnurrbart. Er ist sehr klug und klein. Er trägt einen grauen Anzug mit einer schwarzen Krawatte."]
+  }
+];
+
+// Juego "Wer bin ich?": pistas en primera persona (alemán A2)
+const WER_BIN_ICH = [
+  { name: "Mr. Peabody", foto: "peabody", farbe: "#c93c34", tipps: ["Ich bin 12 Jahre alt.", "Ich mache gern Yoga und Zumba.", "Ich bin Wissenschaftler und Erfinder.", "Ich bin ein Hund und trage eine rote Fliege."] },
+  { name: "Sherman", foto: "sherman", farbe: "#23867a", tipps: ["Ich bin 7 Jahre alt.", "Ich habe rote Haare und braune Augen.", "Mittags esse ich ein Thunfisch-Sandwich.", "Mein Vater ist ein Hund!"] },
+  { name: "Penny", foto: "penny", farbe: "#c2527f", tipps: ["Ich spiele Volleyball.", "Ich spiele sehr gut Geige.", "Am Abend lerne ich Französisch.", "Ich bin eifersüchtig auf Sherman."] },
+  { name: "Maria Antonieta", foto: "maria", farbe: "#4f6fb3", tipps: ["Ich bin 34 Jahre alt.", "Ich habe eine große Frisur.", "Ich wohne in Frankreich.", "Ich esse sehr gern Kuchen."] },
+  { name: "Agamenón", foto: "agamenon", farbe: "#b0742a", tipps: ["Ich habe braune Haare und braune Augen.", "Ich bin sehr stark und groß.", "Ich trage eine rote und goldgelbe Rüstung.", "Ich bin König und Kommandant der griechischen Armee."] },
+  { name: "Albert Einstein", foto: "einstein", farbe: "#6b6b7b", tipps: ["Ich bin sehr klug und klein.", "Ich trage einen grauen Anzug.", "Ich habe einen großen Schnurrbart.", "Ich bin Physiker und Mathematiker."] },
+  { name: "Da Vinci", foto: "davinci", farbe: "#8a6a3a", tipps: ["Ich lebe in der Renaissance.", "Ich male gern Bilder.", "Ich helfe bei der Zeitmaschine.", "Ich male die Mona Lisa."] }
+];
+
+// Juego "Was passiert zuerst?": la historia en el orden correcto
+const GESCHICHTE = [
+  "Sherman und Mr. Peabody sind in Frankreich. Die Revolution beginnt.",
+  "In der Schule ärgert Penny Sherman. Sherman beißt sie.",
+  "Pennys Eltern kommen zum Abendessen.",
+  "Sherman zeigt Penny die Zeitmaschine. Sie reisen ins alte Ägypten.",
+  "Die Zeitmaschine hat keinen Strom. Da Vinci hilft.",
+  "Ein schwarzes Loch! Sie landen im Trojanischen Krieg.",
+  "Ein Loch im Himmel: Viele historische Personen kommen."
+];
+
+/* ══════════════════════════════════════════════════════════════
+   ZONA 3 — QUIZ: 15 preguntas, cada ronda usa 5 al azar.
+   La PRIMERA respuesta de cada pregunta es la correcta
+   (en la página el orden se mezcla solo).
+   ══════════════════════════════════════════════════════════════ */
+const QUIZ = [
+  { frage: "Was für ein Tier ist Mr. Peabody?", antworten: ["Ein Hund", "Eine Katze", "Ein Fuchs", "Ein Papagei"], erklaerung: "Mr. Peabody ist ein sehr intelligenter Hund." },
+  { frage: "Wer ist Sherman?", antworten: ["Der Adoptivsohn von Mr. Peabody", "Der Bruder von Penny", "Ein Lehrer", "Ein König aus Troja"], erklaerung: "Mr. Peabody ist der Adoptivvater von Sherman." },
+  { frage: "Was trägt Mr. Peabody immer?", antworten: ["Eine rote Fliege und eine Brille", "Einen Hut und eine Uhr", "Eine Krawatte und einen Anzug", "Eine Krone"], erklaerung: "Er trägt immer eine rote Fliege und eine große schwarze Brille." },
+  { frage: "Wo wohnen Mr. Peabody und Sherman?", antworten: ["In New York", "In Paris", "In Florenz", "In Kairo"], erklaerung: "Sie wohnen zusammen in einem Penthouse in New York." },
+  { frage: "Wie alt ist Sherman?", antworten: ["7 Jahre", "5 Jahre", "10 Jahre", "12 Jahre"], erklaerung: "Sherman ist 7 Jahre alt. Penny ist auch 7." },
+  { frage: "Welche Haarfarbe hat Sherman?", antworten: ["Rot", "Blond", "Schwarz", "Braun"], erklaerung: "Sherman hat rote Haare und eine runde Brille." },
+  { frage: "Warum ist Penny am Anfang unfreundlich zu Sherman?", antworten: ["Sie ist eifersüchtig auf sein Wissen.", "Sie hat Angst vor Hunden.", "Sie ist krank.", "Sie mag keine Schule."], erklaerung: "Penny ist eifersüchtig, denn Sherman weiß viel über Geschichte." },
+  { frage: "Penny ärgert Sherman in der Schule. Was macht Sherman?", antworten: ["Er beißt sie.", "Er weint.", "Er geht nach Hause.", "Er singt ein Lied."], erklaerung: "Sherman beißt Penny. Danach gibt es ein großes Problem." },
+  { frage: "Welches Instrument spielt Penny?", antworten: ["Geige", "Klavier", "Gitarre", "Flöte"], erklaerung: "Am Nachmittag hat Penny Geigenunterricht." },
+  { frage: "Wann steht Mr. Peabody auf?", antworten: ["Um 5:30 Uhr", "Um 7:00 Uhr", "Um 8:30 Uhr", "Um 10:00 Uhr"], erklaerung: "Er steht um 5:30 Uhr auf. Dann macht er Yoga." },
+  { frage: "Was isst Sherman zu Mittag?", antworten: ["Ein Thunfisch-Sandwich", "Eine Pizza", "Pommes", "Eine Suppe"], erklaerung: "Er isst ein Thunfisch-Sandwich und kleine Karotten." },
+  { frage: "Wie heißt die Zeitmaschine?", antworten: ["WABAC", "TARDIS", "DeLorean", "ZEITO"], erklaerung: "Mit der WABAC reisen sie in die Vergangenheit." },
+  { frage: "Wo beginnt der Film?", antworten: ["In Frankreich", "In Ägypten", "In Troja", "In New York"], erklaerung: "Der Film beginnt in Frankreich, in der Französischen Revolution." },
+  { frage: "Die Zeitmaschine hat keinen Strom. Wer hilft?", antworten: ["Leonardo da Vinci", "Albert Einstein", "Agamenón", "Maria Antonieta"], erklaerung: "Da Vinci und Mr. Peabody machen zusammen einen Plan." },
+  { frage: "Was isst Maria Antonieta gern?", antworten: ["Kuchen", "Fisch", "Äpfel", "Suppe"], erklaerung: "Maria Antonieta isst sehr gern Kuchen." }
+];
+
+/* ══════════════════════════════════════════════════════════════
+   A PARTIR DE AQUÍ NO HACE FALTA CAMBIAR NADA 🙂
+   ══════════════════════════════════════════════════════════════ */
+const reduziert = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const istPlatzhalter = s => !s || String(s).includes("✏️");
+const ohneStift = s => String(s).replace(/✏️/g, "").trim();
+function neu(tag, klasse, text) { const e = document.createElement(tag); if (klasse) e.className = klasse; if (text != null) e.textContent = text; return e; }
+function mischen(liste) { const a = liste.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function initiale(name) { return ohneStift(name).replace(/^(Mr\.|Ms\.|Mrs\.)\s*/, "").charAt(0).toUpperCase() || "?"; }
+function stunde(zeit) { const [h, m] = zeit.split(":").map(Number); return h + (m || 0) / 60; }
+function uhrKurz(zeit) { return zeit.replace(/^0/, ""); }
+function zeitText(h) { const hh = Math.floor(h), mm = Math.round((h - hh) * 60); return String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0"); }
+function absaetze(ziel, liste) { ziel.innerHTML = ""; liste.forEach(t => ziel.appendChild(neu("p", null, t))); }
+// Solo para mostrar un trozo de la rutina: mayúscula inicial y punto final (el texto original no cambia)
+function anzeigeText(t) { let s = t.trim(); s = s.charAt(0).toUpperCase() + s.slice(1); if (/[;,:]$/.test(s)) s = s.slice(0, -1) + "."; else if (!/[.!?…]$/.test(s)) s += "."; return s; }
+function warpEffekt() { const w = $("#warp"); w.classList.remove("los"); void w.offsetWidth; w.classList.add("los"); }
+function portrait(id, name, klasse, ohneTipp) {
+  const p = neu("div", "portrait foto" + (klasse ? " " + klasse : ""));
+  p.dataset.foto = id; p.dataset.alt = name;
+  if (ohneTipp) p.dataset.ohneTipp = "1";
+  p.appendChild(neu("span", "initial", initiale(name)));
+  return p;
+}
+
+/* ---------- Fotos: se buscan solas por nombre ---------- */
+const ENDUNGEN = [".jpg", ".jpeg", ".png", ".webp", ".JPG", ".JPEG", ".PNG"];
+const fotoCache = {};
+function fotoFinden(name) {
+  if (!fotoCache[name]) {
+    fotoCache[name] = new Promise(resolve => {
+      let i = 0;
+      const versuch = () => {
+        if (i >= ENDUNGEN.length) return resolve(null);
+        const url = name + ENDUNGEN[i++];
+        const img = new Image();
+        img.onload = () => resolve(url);
+        img.onerror = versuch;
+        img.src = url;
+      };
+      versuch();
+    });
+  }
+  return fotoCache[name];
+}
+function fotosLaden(wurzel = document) {
+  $$(".foto:not([data-geladen])", wurzel).forEach(slot => {
+    slot.dataset.geladen = "1";
+    const name = slot.dataset.foto;
+    fotoFinden(name).then(url => {
+      if (url) {
+        const img = new Image();
+        img.src = url; img.alt = slot.dataset.alt || "";
+        slot.innerHTML = ""; slot.appendChild(img); slot.classList.add("hat-foto");
+        const tipp = slot.nextElementSibling;
+        if (tipp && tipp.classList.contains("foto-tipp")) tipp.remove();
+      } else if (slot.classList.contains("frei")) {
+        if (MODO_EDICION) {
+          slot.innerHTML = "";
+          const leer = neu("div", "foto-leer");
+          leer.appendChild(neu("span", null, "📷"));
+          leer.append("Sube una foto llamada");
+          leer.appendChild(neu("b", null, name + ".jpg"));
+          slot.appendChild(leer);
+        } else slot.style.display = "none";
+      } else if (MODO_EDICION && !slot.dataset.ohneTipp) {
+        const naechstes = slot.nextElementSibling;
+        if (!naechstes || !naechstes.classList.contains("foto-tipp")) slot.insertAdjacentElement("afterend", neu("span", "foto-tipp", "📷 " + name + ".jpg"));
+      }
+    });
+  });
+}
+
+/* ---------- Autor de cada texto ---------- */
+function autorFuellen(p, schluessel) {
+  const name = AUTOREN[schluessel];
+  p.textContent = ""; p.classList.remove("autor-leer"); p.style.display = "";
+  if (name === undefined || (istPlatzhalter(name) && !MODO_EDICION)) { p.style.display = "none"; return; }
+  if (istPlatzhalter(name)) p.classList.add("autor-leer");
+  p.append("✍️ Text von: ");
+  p.appendChild(neu("strong", null, name));
+}
+function ausweisBauen(dl, eintraege) {
+  eintraege.forEach(([k, v]) => { dl.appendChild(neu("dt", null, k)); dl.appendChild(neu("dd", null, v)); });
+}
+
+/* ---------- Personajes principales ---------- */
+function hauptfigurenBauen() {
+  const box = $("#hauptfiguren");
+  FIGUREN.filter(f => f.typ === "haupt").forEach(f => {
+    const art = neu("article", "hauptfigur zeige");
+    art.style.setProperty("--farbe", f.farbe);
+    const bild = neu("div", "hf-bild");
+    bild.appendChild(portrait(f.id, f.name));
+    const inhalt = neu("div", "hf-inhalt");
+    inhalt.appendChild(neu("span", "hf-rolle", f.rolle));
+    inhalt.appendChild(neu("h4", "hf-name", f.name));
+    const dl = neu("dl", "ausweis"); ausweisBauen(dl, f.steckbrief); inhalt.appendChild(dl);
+    const text = neu("div", "text einklappbar kurz"); text.id = "text-" + f.id; absaetze(text, f.text); inhalt.appendChild(text);
+    const mehr = neu("button", "mehr-btn", "Mehr lesen ▾"); mehr.dataset.text = text.id; inhalt.appendChild(mehr);
+    const mag = neu("div", "mag-box");
+    mag.appendChild(neu("span", "mag-frage", `Magst du ${f.name}?`));
+    const ja = neu("button", "mag-btn", "👍 Ja"), nein = neu("button", "mag-btn", "👎 Nein");
+    const antwort = neu("p", "mag-antwort"); antwort.setAttribute("aria-live", "polite");
+    [ja, nein].forEach(b => b.addEventListener("click", () => {
+      ja.classList.toggle("gewaehlt", b === ja); nein.classList.toggle("gewaehlt", b === nein);
+      const sagtJa = b === ja;
+      antwort.textContent = f.wirMoegen
+        ? (sagtJa ? `Wir auch! Wir mögen ${f.pronomen} sehr. 😊` : `Oh! Wir mögen ${f.pronomen} aber. 😉`)
+        : (sagtJa ? `Interessant! Wir mögen ${f.pronomen} nicht so. 🤔` : "Wir auch nicht! 😅");
+    }));
+    mag.append(ja, nein, antwort);
+    inhalt.appendChild(mag);
+    const autor = neu("p", "autor"); autor.dataset.autor = f.id; inhalt.appendChild(autor);
+    art.append(bild, inhalt);
+    box.appendChild(art);
+  });
+}
+
+/* ---------- Personajes secundarios (tarjetas que giran) ---------- */
+function nebenfigurenBauen() {
+  const box = $("#nebenfiguren");
+  FIGUREN.filter(f => f.typ === "neben").forEach(f => {
+    const karte = neu("div", "flip zeige");
+    karte.style.setProperty("--farbe", f.farbe);
+    karte.tabIndex = 0; karte.setAttribute("role", "button"); karte.setAttribute("aria-pressed", "false");
+    const innen = neu("div", "flip-innen");
+    const vorne = neu("div", "flip-seite flip-vorne");
+    vorne.appendChild(portrait(f.id, f.name, "klein"));
+    vorne.appendChild(neu("h4", null, f.name));
+    vorne.appendChild(neu("span", "nf-rolle", f.rolle));
+    const dl = neu("dl", "ausweis"); ausweisBauen(dl, f.steckbrief); vorne.appendChild(dl);
+    vorne.appendChild(neu("span", "flip-hinweis", "↻ Klick zum Umdrehen"));
+    const hinten = neu("div", "flip-seite flip-hinten");
+    hinten.appendChild(neu("h4", null, f.name));
+    const text = neu("div", "text"); absaetze(text, f.text); hinten.appendChild(text);
+    const autor = neu("p", "autor"); autor.dataset.autor = f.id; hinten.appendChild(autor);
+    hinten.appendChild(neu("span", "flip-hinweis", "↻ Zurück"));
+    innen.append(vorne, hinten);
+    karte.appendChild(innen);
+    const drehen = () => { const an = karte.classList.toggle("gedreht"); karte.setAttribute("aria-pressed", an); };
+    karte.addEventListener("click", drehen);
+    karte.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); drehen(); } });
+    box.appendChild(karte);
+  });
+}
+
+/* ---------- Tarjetas de rutina ---------- */
+const MIT_ROUTINE = FIGUREN.filter(f => f.tagesablauf);
+function routinenBauen() {
+  const box = $("#routinen");
+  MIT_ROUTINE.forEach(f => {
+    const k = neu("article", "routine zeige");
+    k.style.setProperty("--farbe", f.farbe);
+    k.tabIndex = 0; k.setAttribute("role", "button");
+    k.appendChild(portrait(f.id, f.name, "mittel"));
+    k.appendChild(neu("h4", null, f.name));
+    k.appendChild(neu("p", "r-zeit", `🕒 ${uhrKurz(f.tagesablauf[0].zeit)} – ${uhrKurz(f.tagesablauf[f.tagesablauf.length - 1].zeit)} Uhr`));
+    const balken = neu("div", "tagesbalken"); balken.setAttribute("aria-hidden", "true");
+    f.tagesablauf.forEach(s => { const d = neu("span", "punkt"); d.style.left = ((stunde(s.zeit) - 5) / 18 * 100) + "%"; balken.appendChild(d); });
+    k.appendChild(balken);
+    const btn = neu("button", "los-btn", "Den Tag ansehen ⟶"); btn.tabIndex = -1; k.appendChild(btn);
+    k.addEventListener("click", () => modalOeffnen(f, 0));
+    k.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); modalOeffnen(f, 0); } });
+    box.appendChild(k);
+  });
+}
+
+/* ---------- Cielo que cambia con la hora ---------- */
+function himmelFarben(h) {
+  if (h < 5 || h >= 21.5) return ["#0b0e2a", "#232a5c"];
+  if (h < 8) return ["#5a6fb5", "#ffad7a"];
+  if (h < 17) return ["#4fa8de", "#c8ecfb"];
+  if (h < 19.5) return ["#7b4e95", "#f2865b"];
+  return ["#1d1f55", "#5a3f7a"];
+}
+function himmelZeigen(himmel, koerper, h) {
+  const [oben, unten] = himmelFarben(h);
+  himmel.style.background = `linear-gradient(${oben}, ${unten})`;
+  let t;
+  if (h >= 6 && h <= 20) { koerper.textContent = "☀️"; t = (h - 6) / 14; }
+  else { koerper.textContent = "🌙"; t = ((h - 20 + 24) % 24) / 10; }
+  koerper.style.left = (10 + 80 * t) + "%";
+  koerper.style.top = (82 - Math.sin(Math.PI * t) * 60) + "%";
+}
+
+/* ---------- Ventana de la rutina ---------- */
+const modal = $("#modal"), regler = $("#tag-regler");
+let aktuelleFigur = null, abspielTimer = null, letzterFokus = null;
+function schrittZeigen(i) {
+  const s = aktuelleFigur.tagesablauf[i];
+  regler.value = i;
+  regler.setAttribute("aria-valuetext", s.zeit + " Uhr");
+  $("#uhrzeit").textContent = s.zeit;
+  $("#bis").textContent = s.bis ? `bis ${s.bis} Uhr` : "";
+  $("#schritt-titel").textContent = `${s.icon} ${s.kurz}`;
+  const a = $("#aktivitaet");
+  a.textContent = anzeigeText(s.text);
+  a.classList.remove("wechsel"); void a.offsetWidth; a.classList.add("wechsel");
+  $$(".zeit-chip").forEach((c, j) => c.classList.toggle("aktiv", j === i));
+  himmelZeigen($("#himmel"), $("#koerper"), stunde(s.zeit));
+}
+function stoppen() {
+  clearInterval(abspielTimer); abspielTimer = null;
+  $("#abspielen").textContent = "▶ Tag abspielen";
+  $("#abspielen").classList.remove("laeuft");
+}
+function modalOeffnen(f, start) {
+  letzterFokus = document.activeElement;
+  aktuelleFigur = f; stoppen();
+  $("#modal-name").textContent = f.name;
+  regler.max = f.tagesablauf.length - 1;
+  const chips = $("#zeit-chips"); chips.innerHTML = "";
+  f.tagesablauf.forEach((s, i) => {
+    const c = neu("button", "zeit-chip", uhrKurz(s.zeit));
+    c.addEventListener("click", () => { stoppen(); schrittZeigen(i); });
+    chips.appendChild(c);
+  });
+  const notiz = $("#notiz");
+  notiz.hidden = !f.notiz;
+  $("#notiz-text").textContent = f.notiz || "";
+  absaetze($("#volltext"), [f.tagesablauf.map(s => s.text).join(" ")].concat(f.notiz ? [f.notiz] : []));
+  $("#volltext").classList.remove("offen");
+  $("#volltext-btn").textContent = "📖 Ganzen Text lesen";
+  autorFuellen($("#modal-autor"), "rutina_" + f.id);
+  schrittZeigen(start || 0);
+  modal.classList.add("offen"); modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  $(".modal-box").scrollTop = 0;
+  $("#modal-zu").focus();
+}
+function modalSchliessen() {
+  stoppen();
+  modal.classList.remove("offen"); modal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  if (letzterFokus) letzterFokus.focus();
+}
+regler.addEventListener("input", () => { stoppen(); schrittZeigen(+regler.value); });
+$("#schritt-weiter").addEventListener("click", () => { stoppen(); schrittZeigen(Math.min(+regler.max, +regler.value + 1)); });
+$("#schritt-zurueck").addEventListener("click", () => { stoppen(); schrittZeigen(Math.max(0, +regler.value - 1)); });
+$("#abspielen").addEventListener("click", () => {
+  if (abspielTimer) { stoppen(); return; }
+  if (+regler.value >= +regler.max) schrittZeigen(0);
+  $("#abspielen").textContent = "⏸ Pause"; $("#abspielen").classList.add("laeuft");
+  abspielTimer = setInterval(() => {
+    const n = +regler.value + 1;
+    if (n > +regler.max) { stoppen(); return; }
+    schrittZeigen(n);
+  }, 2600);
+});
+$("#volltext-btn").addEventListener("click", () => {
+  const offen = $("#volltext").classList.toggle("offen");
+  $("#volltext-btn").textContent = offen ? "📖 Text schließen" : "📖 Ganzen Text lesen";
+});
+$("#modal-zu").addEventListener("click", modalSchliessen);
+modal.addEventListener("click", e => { if (e.target === modal) modalSchliessen(); });
+document.addEventListener("keydown", e => {
+  if (!modal.classList.contains("offen")) return;
+  if (e.key === "Escape") modalSchliessen();
+  if (e.key === "ArrowRight" && e.target !== regler) $("#schritt-weiter").click();
+  if (e.key === "ArrowLeft" && e.target !== regler) $("#schritt-zurueck").click();
+});
+
+/* ---------- ¿Quién hace qué a la misma hora? ---------- */
+function letzterSchritt(f, h) { let idx = -1; f.tagesablauf.forEach((s, i) => { if (stunde(s.zeit) <= h + 1e-9) idx = i; }); return idx; }
+const vSpalten = [];
+let vTimer = null;
+function vergleichBauen() {
+  const box = $("#v-spalten");
+  MIT_ROUTINE.forEach(f => {
+    const sp = neu("button", "v-spalte");
+    sp.style.setProperty("--farbe", f.farbe);
+    sp.appendChild(portrait(f.id, f.name, "mini", true));
+    sp.appendChild(neu("strong", null, f.name));
+    const icon = neu("span", "v-icon"), kurz = neu("span", "v-kurz"), seit = neu("span", "v-seit");
+    sp.append(icon, kurz, seit);
+    sp.addEventListener("click", () => modalOeffnen(f, Math.max(0, letzterSchritt(f, +$("#v-regler").value / 2))));
+    box.appendChild(sp);
+    vSpalten.push({ f, sp, icon, kurz, seit, letzt: null });
+  });
+  $("#v-regler").addEventListener("input", () => { vStoppen(); vergleichZeigen(+$("#v-regler").value / 2); });
+  $("#v-abspielen").addEventListener("click", () => {
+    if (vTimer) { vStoppen(); return; }
+    const r = $("#v-regler");
+    if (+r.value >= +r.max) r.value = r.min;
+    $("#v-abspielen").textContent = "⏸ Pause";
+    vTimer = setInterval(() => {
+      if (+r.value >= +r.max) { vStoppen(); return; }
+      r.value = +r.value + 1; vergleichZeigen(+r.value / 2);
+    }, 650);
+  });
+  vergleichZeigen(12);
+}
+function vStoppen() { clearInterval(vTimer); vTimer = null; $("#v-abspielen").textContent = "▶ Abspielen"; }
+function vergleichZeigen(h) {
+  $("#v-zeit").textContent = zeitText(h);
+  himmelZeigen($("#v-himmel"), $("#v-koerper"), h);
+  vSpalten.forEach(v => {
+    const idx = letzterSchritt(v.f, h);
+    if (idx === v.letzt) return;
+    v.letzt = idx;
+    if (idx < 0) { v.icon.textContent = "😴"; v.kurz.textContent = "Schläft noch"; v.seit.textContent = ""; }
+    else {
+      const s = v.f.tagesablauf[idx];
+      v.icon.textContent = s.icon; v.kurz.textContent = s.kurz;
+      v.seit.textContent = s.bis ? `${uhrKurz(s.zeit)}–${uhrKurz(s.bis)} Uhr` : `seit ${uhrKurz(s.zeit)} Uhr`;
+    }
+    [v.icon, v.kurz].forEach(el => { el.classList.remove("wechsel"); void el.offsetWidth; el.classList.add("wechsel"); });
+  });
+}
+
+/* ---------- Da Vinci: escritura en espejo ---------- */
+$("#spiegel-btn").addEventListener("click", () => {
+  const gespiegelt = $("#davinci-text").classList.toggle("gespiegelt");
+  $("#spiegel-btn").textContent = gespiegelt ? "🪞 Spiegel benutzen" : "🪞 Wieder Spiegelschrift";
+  $("#spiegel-hinweis").textContent = gespiegelt ? "Der Text ist in Spiegelschrift. Benutz den Spiegel!" : "Super! Jetzt kannst du den Text lesen. 😊";
+});
+
+/* ---------- Quiz: 15 preguntas, 5 al azar por ronda ---------- */
+const quizBox = $("#quiz-box");
+let quizStapel = [], quizRunde = 0, rundeFragen = [], frageNr = 0, quizPunkte = 0, quizRekord = 0;
+function neueQuizRunde() {
+  const n = Math.min(5, QUIZ.length);
+  if (quizStapel.length < n) {
+    const rest = QUIZ.filter(q => !quizStapel.includes(q));
+    quizStapel = quizStapel.concat(mischen(rest));
+  }
+  rundeFragen = quizStapel.splice(0, n).map(q => ({
+    frage: q.frage, erklaerung: q.erklaerung,
+    optionen: mischen(q.antworten.map((t, i) => ({ t, ok: i === 0 })))
+  }));
+  quizRunde++; frageNr = 0; quizPunkte = 0;
+  frageZeigen();
+}
+function frageZeigen() {
+  const q = rundeFragen[frageNr];
+  quizBox.innerHTML = "";
+  const fort = neu("div", "quiz-fortschritt"); const balken = neu("div"); balken.style.width = (frageNr / rundeFragen.length * 100) + "%"; fort.appendChild(balken);
+  const zaehler = neu("div", "quiz-zaehler");
+  zaehler.append(neu("span", null, `Runde ${quizRunde}`), neu("span", null, `Frage ${frageNr + 1} von ${rundeFragen.length}`));
+  const frage = neu("p", "quiz-frage", q.frage);
+  const antworten = neu("div", "antworten");
+  q.optionen.forEach((o, i) => {
+    const b = neu("button", "antwort", o.t);
+    b.addEventListener("click", () => beantworten(i));
+    antworten.appendChild(b);
+  });
+  quizBox.append(fort, zaehler, frage, antworten, neu("div", "erklaerung"));
+}
+function beantworten(i) {
+  const q = rundeFragen[frageNr];
+  const knoepfe = $$(".antwort", quizBox);
+  knoepfe.forEach(b => b.disabled = true);
+  const richtigIdx = q.optionen.findIndex(o => o.ok);
+  knoepfe[richtigIdx].classList.add("richtig");
+  const richtig = i === richtigIdx;
+  if (richtig) quizPunkte++; else knoepfe[i].classList.add("falsch");
+  const erk = $(".erklaerung", quizBox);
+  erk.textContent = (richtig ? "✅ Richtig! " : "❌ Leider falsch. ") + (q.erklaerung || "");
+  erk.classList.add("sichtbar");
+  const letzte = frageNr >= rundeFragen.length - 1;
+  const weiter = neu("button", "btn-messing", letzte ? "Ergebnis ansehen 🏆" : "Nächste Frage ⟶");
+  weiter.addEventListener("click", () => { frageNr++; letzte ? ergebnisZeigen() : frageZeigen(); });
+  quizBox.appendChild(weiter);
+  weiter.focus({ preventScroll: true });
+}
+function ergebnisZeigen() {
+  const anteil = quizPunkte / rundeFragen.length;
+  quizRekord = Math.max(quizRekord, quizPunkte);
+  const text = anteil === 1 ? "Perfekt! Du bist ein Genie – wie Mr. Peabody! 🐶🎓"
+            : anteil >= 0.6 ? "Sehr gut! Du weißt viel über den Film. 👏"
+            : "Nicht schlecht! Spiel noch eine Runde. 🍿";
+  quizBox.innerHTML = "";
+  const fort = neu("div", "quiz-fortschritt"); const balken = neu("div"); balken.style.width = "100%"; fort.appendChild(balken);
+  const erg = neu("div", "ergebnis");
+  erg.appendChild(neu("div", "quiz-zaehler")).appendChild(neu("span", null, `Runde ${quizRunde} · Dein Ergebnis`));
+  erg.appendChild(neu("div", "punkte", `${quizPunkte}/${rundeFragen.length}`));
+  erg.appendChild(neu("p", null, text));
+  erg.appendChild(neu("p", "rekord", `🏅 Dein Rekord: ${quizRekord} von ${rundeFragen.length}`));
+  const nochmal = neu("button", "btn-messing", "↺ Neue Runde – neue Fragen!");
+  nochmal.addEventListener("click", neueQuizRunde);
+  erg.appendChild(nochmal);
+  quizBox.append(fort, erg);
+  if (anteil >= 0.6) konfetti();
+}
+
+/* ---------- Juego: ¿Quién soy? ---------- */
+const wbi = { reihe: [], aktuell: null, tipps: 0, punkte: 0, runde: 0, fertig: false, knoepfe: [] };
+function wbiBauen() {
+  const box = $("#wbi-namen");
+  WER_BIN_ICH.forEach(p => {
+    const b = neu("button", "name-btn", p.name);
+    b.addEventListener("click", () => wbiRaten(p, b));
+    box.appendChild(b); wbi.knoepfe.push(b);
+  });
+  $("#wbi-mehr").addEventListener("click", () => {
+    if (wbi.fertig || wbi.tipps >= wbi.aktuell.tipps.length) return;
+    tippZeigen();
+  });
+  $("#wbi-weiter").addEventListener("click", wbiNeu);
+  wbiNeu();
+}
+function tippZeigen() {
+  const i = wbi.tipps++;
+  const li = neu("li");
+  li.appendChild(neu("b", null, `Tipp ${i + 1}: `));
+  li.append(wbi.aktuell.tipps[i]);
+  $("#wbi-tipps").appendChild(li);
+  $("#wbi-mehr").disabled = wbi.fertig || wbi.tipps >= wbi.aktuell.tipps.length;
+}
+function wbiNeu() {
+  if (!wbi.reihe.length) wbi.reihe = mischen(WER_BIN_ICH);
+  wbi.aktuell = wbi.reihe.pop(); wbi.tipps = 0; wbi.fertig = false; wbi.runde++;
+  $("#wbi-tipps").innerHTML = ""; $("#wbi-ergebnis").innerHTML = "";
+  wbi.knoepfe.forEach(b => { b.disabled = false; b.classList.remove("richtig", "falsch"); });
+  $("#wbi-weiter").hidden = true;
+  $("#wbi-runde").textContent = `Figur ${wbi.runde}`;
+  $("#wbi-punkte").textContent = `⭐ Punkte: ${wbi.punkte}`;
+  tippZeigen();
+}
+function wbiRaten(person, knopf) {
+  if (wbi.fertig) return;
+  const erg = $("#wbi-ergebnis");
+  if (person === wbi.aktuell) {
+    const p = 5 - wbi.tipps;
+    wbi.punkte += p;
+    knopf.classList.add("richtig");
+    wbiEnde(`Richtig! Das ist ${person.name}! +${p} ${p === 1 ? "Punkt" : "Punkte"} 🎉`);
+    if (wbi.tipps === 1) konfetti();
+  } else {
+    knopf.classList.add("falsch"); knopf.disabled = true;
+    if (wbi.tipps < wbi.aktuell.tipps.length) {
+      tippZeigen();
+      erg.textContent = `Nein, das ist nicht ${person.name}. Hier ist noch ein Tipp!`;
+    } else {
+      wbi.knoepfe[WER_BIN_ICH.indexOf(wbi.aktuell)].classList.add("richtig");
+      wbiEnde(`Schade! Das ist ${wbi.aktuell.name}.`);
+    }
+  }
+}
+function wbiEnde(nachricht) {
+  wbi.fertig = true;
+  wbi.knoepfe.forEach(b => b.disabled = true);
+  $("#wbi-mehr").disabled = true;
+  const erg = $("#wbi-ergebnis"); erg.innerHTML = "";
+  const bild = portrait(wbi.aktuell.foto, wbi.aktuell.name, "mini", true);
+  bild.style.setProperty("--farbe", wbi.aktuell.farbe);
+  erg.append(bild, neu("span", null, nachricht));
+  fotosLaden(erg);
+  $("#wbi-punkte").textContent = `⭐ Punkte: ${wbi.punkte}`;
+  $("#wbi-weiter").hidden = false;
+}
+
+/* ---------- Juego: ¿Qué pasa primero? ---------- */
+const ord = { naechster: 0, fehler: 0, start: 0, timer: null, fertig: false };
+function ordNeu() {
+  let reihe;
+  do { reihe = mischen(GESCHICHTE.map((_, i) => i)); } while (GESCHICHTE.length > 1 && reihe.every((v, i) => v === i));
+  Object.assign(ord, { naechster: 0, fehler: 0, start: 0, fertig: false });
+  clearInterval(ord.timer);
+  const liste = $("#ordnung-liste"); liste.innerHTML = "";
+  reihe.forEach(idx => {
+    const b = neu("button", "o-karte");
+    b.appendChild(neu("span", "o-nr", "?"));
+    b.appendChild(neu("span", null, GESCHICHTE[idx]));
+    b.addEventListener("click", () => ordKlick(idx, b));
+    liste.appendChild(b);
+  });
+  $("#o-ende").hidden = true;
+  ordStatus();
+}
+function ordStatus() {
+  const sek = ord.start ? Math.round((Date.now() - ord.start) / 1000) : 0;
+  $("#o-status").textContent = `✅ ${ord.naechster} / ${GESCHICHTE.length}   ·   ❌ Fehler: ${ord.fehler}   ·   ⏱ ${sek} s`;
+}
+function ordKlick(idx, b) {
+  if (ord.fertig || b.classList.contains("fertig")) return;
+  if (!ord.start) { ord.start = Date.now(); ord.timer = setInterval(ordStatus, 1000); }
+  if (idx === ord.naechster) {
+    b.classList.add("fertig"); b.disabled = true;
+    $(".o-nr", b).textContent = idx + 1;
+    ord.naechster++;
+    if (ord.naechster === GESCHICHTE.length) ordFertig();
+  } else {
+    ord.fehler++;
+    b.classList.remove("falsch"); void b.offsetWidth; b.classList.add("falsch");
+    setTimeout(() => b.classList.remove("falsch"), 500);
+  }
+  ordStatus();
+}
+function ordFertig() {
+  ord.fertig = true; clearInterval(ord.timer);
+  const sek = Math.max(1, Math.round((Date.now() - ord.start) / 1000));
+  const ende = $("#o-ende"); ende.innerHTML = ""; ende.hidden = false;
+  ende.appendChild(neu("p", null, "Super! Die Geschichte ist in Ordnung! 🎉"));
+  ende.appendChild(neu("p", null, `Du hast ${ord.fehler} Fehler gemacht und ${sek} ${sek === 1 ? "Sekunde" : "Sekunden"} gebraucht.`));
+  const nochmal = neu("button", "btn-klein", "↺ Nochmal spielen");
+  nochmal.addEventListener("click", ordNeu);
+  ende.appendChild(nochmal);
+  konfetti();
+}
+
+/* ---------- Equipo (solo nombres) y pie de página ---------- */
+const TEXT_NAMEN = {
+  zusammenfassung: "Zusammenfassung", rezension: "Rezension",
+  peabody: "Mr. Peabody", sherman: "Sherman", penny: "Penny",
+  maria: "Maria Antonieta", agamenon: "Agamenón", einstein: "Albert Einstein",
+  rutina_peabody: "Tagesablauf Mr. Peabody", rutina_sherman: "Tagesablauf Sherman", rutina_penny: "Tagesablauf Penny",
+  davinci: "Da Vinci"
+};
+function teamBauen() {
+  const farben = ["#c93c34", "#23867a", "#c2527f", "#4f6fb3"];
+  const box = $("#team-liste");
+  TEAM.forEach((name, i) => {
+    const k = neu("article", "mitglied zeige");
+    k.style.setProperty("--farbe", farben[i % farben.length]);
+    const h = neu("h4", null, MODO_EDICION ? name : ohneStift(name));
+    if (istPlatzhalter(name)) h.classList.add("leer");
+    k.appendChild(h);
+    if (!istPlatzhalter(name)) {
+      const suche = name.trim().toLowerCase();
+      const texte = Object.keys(AUTOREN).filter(key => !istPlatzhalter(AUTOREN[key]) && AUTOREN[key].toLowerCase().includes(suche)).map(key => TEXT_NAMEN[key] || key);
+      if (texte.length) k.appendChild(neu("p", "texte", "✍️ Texte: " + texte.join(", ")));
+    }
+    box.appendChild(k);
+  });
+}
+function footerBauen() {
+  const namen = TEAM.filter(n => !istPlatzhalter(n));
+  const teile = [];
+  if (namen.length) teile.push("Von: " + (namen.length > 1 ? namen.slice(0, -1).join(", ") + " und " + namen[namen.length - 1] : namen[0]));
+  if (!istPlatzhalter(KURS) || MODO_EDICION) teile.push("Kurs: " + KURS);
+  if (!istPlatzhalter(UNIVERSIDAD) || MODO_EDICION) teile.push(UNIVERSIDAD);
+  $("#footer-info").textContent = teile.join(" · ");
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MÁQUINA DEL TIEMPO (portada)
+   ══════════════════════════════════════════════════════════════ */
+const ZIELE = {
+  labor:      { name: "Labor",      zeit: "Heute",            jahr: "HEUTE" },
+  aegypten:   { name: "Ägypten",    zeit: "um 1330 v. Chr.",  jahr: "1330 v.Chr." },
+  troja:      { name: "Troja",      zeit: "um 1200 v. Chr.",  jahr: "1200 v.Chr." },
+  florenz:    { name: "Florenz",    zeit: "um 1500",          jahr: "UM 1500" },
+  frankreich: { name: "Frankreich", zeit: "Versailles, 1789", jahr: "1789" }
+};
+const hero = $("#start"), buehne = $("#maschine-buehne"), maschine = $("#maschine");
+const zmKnoepfe = $$(".zm-knopf");
+const ZM = { zustand: "aus", szene: "labor", ziel: null };   // estado actual y destino
+const M = { winkel: 0, tempo: 0, zielTempo: 0 };              // giro de los engranajes
+const warte = ms => new Promise(r => setTimeout(r, ms));
+let ZENTRUM = { x: 0, y: 0 };
+
+function zahnradPfad(cx, cy, rA, rI, zaehne, loch, lochKreis) {
+  const s = Math.PI * 2 / zaehne; let d = "";
+  for (let i = 0; i < zaehne; i++) {
+    const a = i * s;
+    [[a - s * .26, rI], [a - s * .14, rA], [a + s * .14, rA], [a + s * .26, rI]].forEach(([w, r], j) => {
+      d += (i === 0 && j === 0 ? "M" : "L") + (cx + r * Math.cos(w)).toFixed(1) + " " + (cy + r * Math.sin(w)).toFixed(1) + " ";
+    });
+  }
+  d += "Z ";
+  const kreis = (x, y, r) => `M${(x + r).toFixed(1)} ${y.toFixed(1)} A${r} ${r} 0 1 0 ${(x - r).toFixed(1)} ${y.toFixed(1)} A${r} ${r} 0 1 0 ${(x + r).toFixed(1)} ${y.toFixed(1)} Z `;
+  if (loch) d += kreis(cx, cy, loch);
+  if (lochKreis) for (let k = 0; k < 4; k++) { const w = k * Math.PI / 2 + Math.PI / 4; d += kreis(cx + lochKreis * Math.cos(w), cy + lochKreis * Math.sin(w), 6); }
+  return d;
+}
+(function maschineBauen() {
+  const NS = "http://www.w3.org/2000/svg";
+  const svgEl = (tag, attrs, eltern) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); eltern.appendChild(e); return e; };
+  $("#m-zahnrad path").setAttribute("d", zahnradPfad(200, 190, 130, 120, 32, 106));
+  $("#m-rad-l path").setAttribute("d", zahnradPfad(52, 290, 46, 38, 12, 0, 22));
+  $("#m-rad-r path").setAttribute("d", zahnradPfad(348, 290, 46, 38, 12, 0, 22));
+  for (let i = 0; i < 24; i++) { const w = (i * 15 + 7.5) * Math.PI / 180; svgEl("circle", { cx: (200 + 157 * Math.cos(w)).toFixed(1), cy: (190 + 157 * Math.sin(w)).toFixed(1), r: 2.2 }, $("#m-nieten")); }
+  for (let i = 0; i < 12; i++) {
+    const w = (i * 30 - 90) * Math.PI / 180, cx = (200 + 148 * Math.cos(w)).toFixed(1), cy = (190 + 148 * Math.sin(w)).toFixed(1);
+    const halo = svgEl("circle", { class: "m-lampe-halo", cx, cy, r: 11, stroke: "none" }, $("#m-lampen")); halo.style.setProperty("--i", i);
+    const lampe = svgEl("circle", { class: "m-lampe", cx, cy, r: 6.5 }, $("#m-lampen")); lampe.style.setProperty("--i", i);
+    svgEl("circle", { cx, cy, r: 7 }, $("#m-glanz"));
+  }
+  for (let i = 0; i < 48; i++) { const w = i * 7.5 * Math.PI / 180, r1 = i % 6 === 0 ? 80 : 85; svgEl("line", { x1: (200 + r1 * Math.cos(w)).toFixed(1), y1: (190 + r1 * Math.sin(w)).toFixed(1), x2: (200 + 91 * Math.cos(w)).toFixed(1), y2: (190 + 91 * Math.sin(w)).toFixed(1) }, $("#m-striche")); }
+  ["#8FF5EE", "#FFD36E", "#8FF5EE", "#FF8A7A", "#8FF5EE", "#FFD36E", "#8FF5EE"].forEach((c, i) => { const l = svgEl("circle", { class: "m-led", cx: 140 + i * 20, cy: 416, r: 5 }, $("#m-leds")); l.style.setProperty("--c", c); l.style.setProperty("--i", i); });
+  for (let a = 0; a < 3; a++) {
+    let d = "";
+    for (let s = 0; s <= 24; s++) { const t = s / 24, r = 8 + 54 * t, w = (a * 120 + t * 320) * Math.PI / 180; d += (s ? "L" : "M") + (200 + r * Math.cos(w)).toFixed(1) + " " + (190 + r * Math.sin(w)).toFixed(1) + " "; }
+    svgEl("path", { d, opacity: (0.9 - a * 0.2).toFixed(2) }, $("#m-wirbel"));
+  }
+})();
+// Cada pieza que gira es su propia capa: girarla no obliga a redibujar la máquina
+const drehTeile = [[$("#m-zahnrad"), 1], [$("#m-innenring"), -1.5], [$("#m-wirbel"), 4], [$("#m-rad-l"), -2.8], [$("#m-rad-r"), 2.8]];
+function maschineDrehen() {
+  for (const [el, faktor] of drehTeile) el.style.transform = `rotate(${((M.winkel * faktor) % 360).toFixed(2)}deg)`;
+}
+
+function zustandSetzen(z) { ZM.zustand = z; hero.dataset.zustand = z; }
+function knoepfeSperren(an) { zmKnoepfe.forEach(k => { k.disabled = an; }); }
+function zmStatus(text) { const s = $("#zm-status"); s.textContent = text; s.classList.remove("wechsel"); void s.offsetWidth; s.classList.add("wechsel"); }
+function ortZeigen(key) { const o = $("#zm-ort"); o.textContent = `📍 ${ZIELE[key].name} · ${ZIELE[key].zeit}`; o.classList.remove("wechsel"); void o.offsetWidth; o.classList.add("wechsel"); }
+function ruetteln(art) { maschine.classList.remove("ruetteln", "ruetteln-klein"); void maschine.offsetWidth; maschine.classList.add(art); }
+maschine.addEventListener("animationend", e => { if (e.target === maschine) maschine.classList.remove("ruetteln", "ruetteln-klein"); });
+function welle() { if (reduziert) return; const w = neu("span", "welle"); buehne.appendChild(w); w.addEventListener("animationend", () => w.remove()); }
+let jahrTimer = null;
+function jahrRattern(endText, dauer) {
+  const el = $("#m-jahr"); clearInterval(jahrTimer);
+  if (reduziert) { el.textContent = endText; return; }
+  const ende = performance.now() + dauer;
+  jahrTimer = setInterval(() => {
+    if (performance.now() >= ende) { clearInterval(jahrTimer); el.textContent = endText; return; }
+    el.textContent = String(Math.floor(1000 + Math.random() * 9000));
+  }, 70);
+}
+function szeneEl(key) { return $(`.szene[data-szene="${key}"]`); }
+function szeneAusblenden(key) { const s = szeneEl(key); s.classList.remove("aktiv"); s.classList.add("geht"); setTimeout(() => s.classList.remove("geht"), 1300); }
+function szeneEinblenden(key) { const s = szeneEl(key); s.classList.remove("geht"); s.classList.add("kommt"); void s.offsetWidth; s.classList.remove("kommt"); s.classList.add("aktiv"); }
+function paletteSetzen(key) { document.documentElement.dataset.epoche = key; }
+function zentrumMessen() {
+  const h = hero.getBoundingClientRect(), b = buehne.getBoundingClientRect();
+  ZENTRUM = { x: b.left - h.left + b.width / 2, y: b.top - h.top + b.height * (190 / 440) };
+  hero.style.setProperty("--mx", ZENTRUM.x + "px");
+  hero.style.setProperty("--my", ZENTRUM.y + "px");
+}
+
+/* Encendido al cargar la página */
+async function hochfahren() {
+  zustandSetzen("aus"); zmStatus("💤 Die Zeitmaschine schläft …");
+  if (reduziert) {
+    hero.classList.add("funken", "lampen", "energie", "an");
+    zustandSetzen("bereit"); knoepfeSperren(false); zmStatus("✅ Bereit! Wähle ein Ziel.");
+    return;
+  }
+  await warte(1500);
+  zustandSetzen("startet"); hero.classList.add("funken"); zmStatus("⚡ Die Maschine startet …");
+  await warte(700);
+  hero.classList.add("lampen"); M.zielTempo = 8;
+  await warte(1050);
+  hero.classList.add("energie"); M.zielTempo = 60;
+  await warte(500);
+  hero.classList.add("an"); ruetteln("ruetteln-klein"); welle(); blitz(); M.zielTempo = 14;
+  await warte(600);
+  zustandSetzen("bereit"); knoepfeSperren(false); zmStatus("✅ Bereit! Wähle ein Ziel.");
+}
+
+/* Viaje a otra época */
+async function reisen(ziel) {
+  if (ZM.zustand !== "bereit" || !ZIELE[ziel]) return;
+  if (ziel === ZM.szene) {   // ya estamos aquí: sin transición
+    const k = zmKnoepfe.find(b => b.dataset.ziel === ziel);
+    k.classList.remove("stups"); void k.offsetWidth; k.classList.add("stups");
+    return;
+  }
+  const von = ZM.szene;
+  ZM.ziel = ziel; zustandSetzen("reist"); knoepfeSperren(true);
+  zmKnoepfe.forEach(k => k.setAttribute("aria-pressed", String(k.dataset.ziel === ziel)));
+  tonReise(); musikWechseln(ziel);
+  zmStatus(ziel === "labor" ? "🌀 Wir reisen zurück ins Labor …" : `🌀 Wir reisen nach ${ZIELE[ziel].name} …`);
+  M.zielTempo = 320; pModus = "reise";
+  ruetteln("ruetteln"); jahrRattern(ZIELE[ziel].jahr, 1500);
+  if (reduziert) {
+    szeneAusblenden(von); szeneEinblenden(ziel); paletteSetzen(ziel);
+    await warte(700);
+  } else {
+    await warte(250); welle();
+    szeneAusblenden(von);                       // el escenario anterior se desenfoca
+    await warte(300);
+    szeneEinblenden(ziel); paletteSetzen(ziel); // aparece el nuevo y cambian los colores
+    await warte(120); blitz(); welle();
+    await warte(700); welle();
+    await warte(500);
+  }
+  M.zielTempo = 14; pModus = "ruhe";
+  ZM.szene = ziel; ZM.ziel = null;
+  ortZeigen(ziel);
+  zmStatus(ziel === "labor" ? "✨ Willkommen zurück im Labor!" : `✨ Willkommen in ${ZIELE[ziel].name}!`);
+  tonAnkunft(); hilfeAktualisieren();
+  await warte(reduziert ? 0 : 400);
+  zustandSetzen("bereit"); knoepfeSperren(false);
+}
+zmKnoepfe.forEach(k => k.addEventListener("click", () => reisen(k.dataset.ziel)));
+
+/* Sonido: efectos y música opcional por época */
+const Ton = { an: true, ctx: null, musik: {}, aktuell: null, webAudio: /^https?:$/.test(location.protocol) };
+function audioCtx() {
+  try {
+    if (!Ton.ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; Ton.ctx = new AC(); }
+    if (Ton.ctx.state === "suspended") Ton.ctx.resume();
+    return Ton.ctx;
+  } catch (e) { return null; }
+}
+function tonReise() {
+  if (!Ton.an) return;
+  const ctx = audioCtx(); if (!ctx) return;
+  const t = ctx.currentTime, dauer = 1.9;
+  const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dauer), ctx.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  const rauschen = ctx.createBufferSource(); rauschen.buffer = buf;
+  const filter = ctx.createBiquadFilter(); filter.type = "bandpass"; filter.Q.value = 1.4;
+  filter.frequency.setValueAtTime(250, t); filter.frequency.exponentialRampToValueAtTime(2600, t + .9); filter.frequency.exponentialRampToValueAtTime(350, t + dauer);
+  const g1 = ctx.createGain(); g1.gain.setValueAtTime(.0001, t); g1.gain.exponentialRampToValueAtTime(.16, t + .5); g1.gain.exponentialRampToValueAtTime(.0001, t + dauer);
+  rauschen.connect(filter); filter.connect(g1); g1.connect(ctx.destination); rauschen.start(t); rauschen.stop(t + dauer);
+  const osz = ctx.createOscillator(); osz.type = "triangle";
+  osz.frequency.setValueAtTime(140, t); osz.frequency.exponentialRampToValueAtTime(920, t + .95); osz.frequency.exponentialRampToValueAtTime(260, t + 1.7);
+  const g2 = ctx.createGain(); g2.gain.setValueAtTime(.0001, t); g2.gain.exponentialRampToValueAtTime(.05, t + .4); g2.gain.exponentialRampToValueAtTime(.0001, t + 1.8);
+  osz.connect(g2); g2.connect(ctx.destination); osz.start(t); osz.stop(t + 1.85);
+}
+function tonAnkunft() {
+  if (!Ton.an || !Ton.ctx) return;
+  const ctx = Ton.ctx, t = ctx.currentTime;
+  [660, 990].forEach((f, i) => {
+    const o = ctx.createOscillator(), g = ctx.createGain(), s = t + i * .09;
+    o.type = "sine"; o.frequency.value = f;
+    g.gain.setValueAtTime(.0001, s); g.gain.exponentialRampToValueAtTime(.07, s + .02); g.gain.exponentialRampToValueAtTime(.0001, s + .9);
+    o.connect(g); g.connect(ctx.destination); o.start(s); o.stop(s + 1);
+  });
+}
+function musikKnoten(a) {
+  if (a._fertig) return; a._fertig = true;
+  if (Ton.webAudio) {
+    const ctx = audioCtx();
+    if (ctx) { try { const q = ctx.createMediaElementSource(a); const g = ctx.createGain(); g.gain.value = 0; q.connect(g); g.connect(ctx.destination); a._gain = g; return; } catch (e) {} }
+  }
+  a.volume = 0;
+}
+function lautstaerke(a, ziel, ms) {
+  if (a._gain) { const g = a._gain.gain, t = Ton.ctx.currentTime; g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(ziel, t + ms / 1000); return; }
+  const start = a.volume, t0 = performance.now();
+  (function schritt() { const p = Math.min(1, (performance.now() - t0) / ms); a.volume = Math.max(0, Math.min(1, start + (ziel - start) * p)); if (p < 1) requestAnimationFrame(schritt); })();
+}
+function musikAn(a, verzoegerung) {
+  musikKnoten(a);
+  if (a._gain) { const g = a._gain.gain, t = Ton.ctx.currentTime; g.cancelScheduledValues(t); g.setValueAtTime(0, t); } else a.volume = 0;
+  try { a.currentTime = 0; } catch (e) {}
+  const p = a.play(); if (p && p.catch) p.catch(() => {});
+  Ton.aktuell = a;
+  setTimeout(() => { if (Ton.aktuell === a) lautstaerke(a, .45, 1400); }, verzoegerung || 0);
+}
+function musikAus(a) {
+  if (Ton.aktuell === a) Ton.aktuell = null;
+  lautstaerke(a, 0, 700);
+  setTimeout(() => { if (Ton.aktuell !== a) a.pause(); }, 750);
+}
+function musikWechseln(ziel) {
+  const neuA = Ton.musik[ziel];
+  if (Ton.aktuell && Ton.aktuell !== neuA) musikAus(Ton.aktuell);
+  if (Ton.an && neuA && Ton.aktuell !== neuA) musikAn(neuA, 900);
+}
+function existiert(url) {
+  if (location.protocol === "file:") return Promise.resolve(null);   // abierto desde el computador: se prueba con el reproductor
+  return fetch(url, { method: "HEAD", cache: "no-store" }).then(r => r.ok).catch(() => null);
+}
+function audioTesten(url) {
+  return new Promise(res => {
+    const a = new Audio(); let fertig = false;
+    const ende = ok => { if (fertig) return; fertig = true; a.removeAttribute("src"); res(ok); };
+    a.addEventListener("loadedmetadata", () => ende(true));
+    a.addEventListener("error", () => ende(false));
+    a.preload = "metadata"; a.src = url;
+    setTimeout(() => ende(false), 5000);
+  });
+}
+async function musikSuchen(key) {
+  for (const endung of [".mp3", ".m4a", ".ogg"]) {
+    const url = "musik-" + key + endung;
+    let da = await existiert(url);
+    if (da === null) da = await audioTesten(url);
+    if (da) { const a = new Audio(url); a.loop = true; a.preload = "auto"; return a; }
+  }
+  return null;
+}
+function musikVorbereiten() { Object.keys(ZIELE).forEach(key => musikSuchen(key).then(a => { if (a) Ton.musik[key] = a; })); }
+const tonBtn = $("#ton-btn");
+tonBtn.addEventListener("click", () => {
+  Ton.an = !Ton.an;
+  tonBtn.textContent = Ton.an ? "🔊" : "🔇";
+  tonBtn.setAttribute("aria-pressed", String(Ton.an));
+  if (!Ton.an) { if (Ton.aktuell) musikAus(Ton.aktuell); }
+  else { audioCtx(); const a = Ton.musik[ZM.szene]; if (a) musikAn(a, 0); }
+});
+
+/* Fondos propios opcionales (szene-*.jpg) y ayuda del modo edición */
+function szenenBilder() {
+  Object.keys(ZIELE).forEach(key => fotoFinden("szene-" + key).then(url => {
+    if (!url) return;
+    const b = neu("div", "szene-bild"); b.style.backgroundImage = `url("${url}")`;
+    szeneEl(key).appendChild(b);
+  }));
+}
+function hilfeAktualisieren() {
+  if (!MODO_EDICION) return;
+  const h = $("#zm-hilfe"); h.hidden = false;
+  h.textContent = `✏️ Opcional para esta época: fondo "szene-${ZM.szene}.jpg" · música "musik-${ZM.szene}.mp3"`;
+}
+
+/* Efectos de luz en UN solo lienzo: partículas, remolino del viaje y destello */
+const pc = $("#zm-partikel"), px = pc.getContext("2d");
+let PW = 0, PH = 0, teilchen = [], pModus = "ruhe", glowRGB = [54, 197, 192], glowZeit = 0;
+let blitzStart = -1e9, wirbelStaerke = 0, wirbelWinkel = 0, bildZaehler = 0;
+function farbeRGB(s) {
+  s = String(s || "").trim();
+  if (s[0] === "#") {
+    if (s.length === 4) s = "#" + s[1] + s[1] + s[2] + s[2] + s[3] + s[3];
+    const n = parseInt(s.slice(1, 7), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  const m = s.match(/[\d.]+/g);
+  return m && m.length >= 3 ? m.slice(0, 3).map(Number) : [54, 197, 192];
+}
+const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${Math.max(0, a).toFixed(3)})`;
+function blitz() { if (!reduziert) blitzStart = performance.now(); }
+function partikelGroesse() {
+  const r = hero.getBoundingClientRect();
+  PW = Math.max(1, Math.round(r.width)); PH = Math.max(1, Math.round(r.height));
+  pc.width = PW; pc.height = PH;   // resolución normal: para luces suaves no hace falta más
+}
+function effekteZeichnen(dt, jetzt) {
+  glowZeit -= dt;
+  if (glowZeit <= 0) { glowRGB = farbeRGB(getComputedStyle(document.documentElement).getPropertyValue("--glow")); glowZeit = .3; }
+  wirbelStaerke += ((pModus === "reise" ? 1 : 0) - wirbelStaerke) * Math.min(1, dt * 3);
+  const blitzT = (jetzt - blitzStart) / 800;
+  const ruhig = pModus === "ruhe" && wirbelStaerke < .01 && (blitzT < 0 || blitzT > 1);
+  if (ruhig && (bildZaehler++ % 2)) return;   // en reposo bastan 30 cuadros por segundo
+  if (ruhig) dt *= 2;
+  const Z = ZENTRUM;
+
+  // nuevas partículas
+  if (pModus === "reise") {
+    for (let i = 0; i < 4; i++) { const w = Math.random() * Math.PI * 2, v = 120 + Math.random() * 220; teilchen.push({ art: "strahl", x: Z.x + Math.cos(w) * 40, y: Z.y + Math.sin(w) * 40, vx: Math.cos(w) * v, vy: Math.sin(w) * v, leben: 1, dauer: .9 + Math.random() * .5, b: 1 + Math.random() * 2 }); }
+    if (Math.random() < .45) teilchen.push({ art: "funke", x: -20, y: Math.random() * PH, vx: 500 + Math.random() * 500, vy: (Math.random() - .5) * 40, leben: 1, dauer: 2.5, b: 1.5 + Math.random() * 2 });
+  } else if (teilchen.length < 24 && Math.random() < .35) {
+    teilchen.push({ art: "staub", x: Math.random() * PW, y: PH * (.3 + Math.random() * .7), vx: (Math.random() - .5) * 12, vy: -8 - Math.random() * 18, leben: 1, dauer: 4 + Math.random() * 4, b: .8 + Math.random() * 1.8 });
+  }
+
+  px.clearRect(0, 0, PW, PH);
+  px.globalCompositeOperation = "lighter";
+
+  // remolino de luz durante el viaje
+  if (wirbelStaerke > .01) {
+    wirbelWinkel += dt * 1.5;
+    const r1 = Math.min(PW, PH) * .24, r2 = Math.hypot(PW, PH) * .62, n = 26, breite = .075;
+    const g = px.createRadialGradient(Z.x, Z.y, r1, Z.x, Z.y, r2);
+    g.addColorStop(0, rgba(glowRGB, 0)); g.addColorStop(.18, rgba(glowRGB, .42 * wirbelStaerke)); g.addColorStop(.6, rgba(glowRGB, .14 * wirbelStaerke)); g.addColorStop(1, rgba(glowRGB, 0));
+    px.fillStyle = g; px.beginPath();
+    for (let i = 0; i < n; i++) {
+      const a = wirbelWinkel + i * Math.PI * 2 / n;
+      px.moveTo(Z.x + Math.cos(a) * r1, Z.y + Math.sin(a) * r1);
+      px.arc(Z.x, Z.y, r2, a, a + breite);
+      px.lineTo(Z.x + Math.cos(a + breite) * r1, Z.y + Math.sin(a + breite) * r1);
+      px.closePath();
+    }
+    px.fill();
+  }
+
+  // destello
+  if (blitzT >= 0 && blitzT <= 1) {
+    const a = blitzT < .25 ? blitzT / .25 : 1 - (blitzT - .25) / .75;
+    const g = px.createRadialGradient(Z.x, Z.y, 0, Z.x, Z.y, Math.hypot(PW, PH) * .55);
+    g.addColorStop(0, `rgba(255,255,255,${(.85 * a).toFixed(3)})`); g.addColorStop(.35, rgba(glowRGB, .45 * a)); g.addColorStop(1, "rgba(0,0,0,0)");
+    px.fillStyle = g; px.fillRect(0, 0, PW, PH);
+  }
+
+  // partículas
+  px.fillStyle = px.strokeStyle = rgba(glowRGB, 1); px.lineCap = "round";
+  for (let i = teilchen.length - 1; i >= 0; i--) {
+    const p = teilchen[i];
+    p.leben -= dt / p.dauer;
+    if (p.leben <= 0 || p.x < -80 || p.x > PW + 80 || p.y < -80 || p.y > PH + 80) { teilchen.splice(i, 1); continue; }
+    if (p.art === "strahl") { p.vx *= 1 + dt * 1.8; p.vy *= 1 + dt * 1.8; }
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    px.globalAlpha = Math.max(0, p.art === "staub" ? Math.sin(p.leben * Math.PI) * .7 : p.leben);
+    if (p.art === "staub") { px.beginPath(); px.arc(p.x, p.y, p.b, 0, 6.283); px.fill(); }
+    else { px.lineWidth = p.b; px.beginPath(); px.moveTo(p.x, p.y); px.lineTo(p.x - p.vx * .06, p.y - p.vy * .06); px.stroke(); }
+  }
+  px.globalAlpha = 1; px.globalCompositeOperation = "source-over";
+  if (teilchen.length > 300) teilchen.splice(0, teilchen.length - 300);
+}
+
+/* Un solo ciclo de animación (se detiene cuando la portada no se ve) */
+let heroSichtbar = true, loopAktiv = false, letzteZeit = performance.now();
+function loop(t) {
+  const dt = Math.min(.05, (t - letzteZeit) / 1000); letzteZeit = t;
+  M.tempo += (M.zielTempo - M.tempo) * Math.min(1, dt * 2.5);
+  M.winkel += M.tempo * dt;
+  if (Math.abs(M.tempo) > .01) maschineDrehen();
+  effekteZeichnen(dt, t);
+  if (heroSichtbar) requestAnimationFrame(loop); else loopAktiv = false;
+}
+function loopStarten() { if (loopAktiv || reduziert) return; loopAktiv = true; letzteZeit = performance.now(); requestAnimationFrame(loop); }
+new IntersectionObserver(e => {
+  heroSichtbar = e[0].isIntersecting;
+  hero.classList.toggle("pausiert", !heroSichtbar);
+  if (heroSichtbar) loopStarten();
+}).observe(hero);
+window.addEventListener("resize", () => { zentrumMessen(); partikelGroesse(); });
+
+/* ---------- Construir todo ---------- */
+hauptfigurenBauen();
+nebenfigurenBauen();
+routinenBauen();
+vergleichBauen();
+wbiBauen();
+ordNeu();
+neueQuizRunde();
+teamBauen();
+footerBauen();
+$$(".autor[data-autor]").forEach(p => autorFuellen(p, p.dataset.autor));
+fotosLaden();
+zentrumMessen();
+partikelGroesse();
+szenenBilder();
+musikVorbereiten();
+hilfeAktualisieren();
+hochfahren();
+if (MODO_EDICION) {
+  const badge = $("#edit-badge"); badge.hidden = false;
+  $("button", badge).addEventListener("click", () => badge.hidden = true);
+}
+
+/* ---------- Barra de progreso y menú activo (máximo una vez por cuadro) ---------- */
+const stationen = $$(".station");
+const navLinks = $$(".zeitnav a");
+let scrollGeplant = false, letzteStation;
+function scrollAktualisieren() {
+  scrollGeplant = false;
+  const h = document.documentElement;
+  $("#fortschritt").style.transform = `scaleX(${(h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight)).toFixed(4)})`;
+  let aktiv = null;
+  for (const s of stationen) { if (s.getBoundingClientRect().top < window.innerHeight * 0.4) aktiv = s.id; else break; }
+  if (aktiv === letzteStation) return;
+  letzteStation = aktiv;
+  navLinks.forEach(a => {
+    const an = a.getAttribute("href") === "#" + aktiv;
+    a.classList.toggle("aktiv", an);
+    if (an) a.parentElement.parentElement.scrollTo({ left: a.offsetLeft - 40, behavior: "smooth" });
+  });
+}
+window.addEventListener("scroll", () => { if (!scrollGeplant) { scrollGeplant = true; requestAnimationFrame(scrollAktualisieren); } }, { passive: true });
+
+/* ---------- Aparición al bajar + contadores ---------- */
+function zaehlen(el) {
+  const ziel = +el.dataset.zahl, von = +(el.dataset.von || 0), start = performance.now(), dauer = 1400;
+  (function schritt(t) {
+    const p = Math.min(1, (t - start) / dauer);
+    el.textContent = Math.round(von + (ziel - von) * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(schritt);
+  })(start);
+}
+const beobachter = new IntersectionObserver(eintraege => {
+  eintraege.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add("da");
+    $$("[data-zahl]", e.target).forEach(z => { if (!reduziert) zaehlen(z); });
+    beobachter.unobserve(e.target);
+  });
+}, { threshold: 0.12 });
+$$(".zeige").forEach(el => beobachter.observe(el));
+
+/* ---------- Tiempo de lectura y "Mehr lesen" ---------- */
+$$(".lesezeit").forEach(el => {
+  const text = document.getElementById(el.dataset.text);
+  if (!text) return;
+  const minuten = Math.max(1, Math.round(text.innerText.trim().split(/\s+/).length / 130));
+  el.textContent = `⏱ Lesezeit: ca. ${minuten} ${minuten === 1 ? "Minute" : "Minuten"}`;
+});
+function mehrPruefen() {
+  $$(".mehr-btn").forEach(btn => {
+    const text = document.getElementById(btn.dataset.text);
+    if (!text || text.classList.contains("offen")) return;
+    const lang = text.scrollHeight > text.clientHeight + 10;
+    text.classList.toggle("lang", lang);
+    btn.classList.toggle("sichtbar", lang);
+  });
+}
+$$(".mehr-btn").forEach(btn => btn.addEventListener("click", () => {
+  const text = document.getElementById(btn.dataset.text);
+  const offen = text.classList.toggle("offen");
+  btn.textContent = offen ? "Weniger lesen ▴" : "Mehr lesen ▾";
+  if (!offen) text.scrollIntoView({ behavior: "smooth", block: "center" });
+}));
+mehrPruefen();
+window.addEventListener("load", () => { mehrPruefen(); zentrumMessen(); partikelGroesse(); });
+window.addEventListener("resize", mehrPruefen);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { mehrPruefen(); zentrumMessen(); partikelGroesse(); });
+
+/* ---------- Destinos del viaje ---------- */
+$$(".ziel").forEach(z => {
+  const kopf = $(".ziel-kopf", z);
+  kopf.addEventListener("click", () => { const offen = z.classList.toggle("offen"); kopf.setAttribute("aria-expanded", offen); });
+});
+
+/* ---------- Estrellas de la reseña (admite decimales, p. ej. 3.6) ---------- */
+$$(".sterne-anzeige").forEach(box => {
+  const wert = parseFloat(box.dataset.wert) || 0;
+  for (let i = 0; i < 5; i++) {
+    const s = neu("span", null, "★");
+    s.style.setProperty("--fuell", (Math.max(0, Math.min(1, wert - i)) * 100) + "%");
+    s.style.transitionDelay = (i * 0.12) + "s";
+    box.appendChild(s);
+  }
+  box.setAttribute("role", "img");
+  box.setAttribute("aria-label", `${String(wert).replace(".", ",")} von 5 Sternen`);
+  new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { box.classList.add("los"); o.disconnect(); } }).observe(box);
+});
+
+/* ---------- El visitante califica ---------- */
+const UNSERE_STERNE = 3.6;
+const NACHRICHTEN = [
+  "Oh nein! Der Film gefällt dir nicht. 😢",
+  "Hmm, der Film gefällt dir nicht so gut. 😕",
+  "Okay! Der Film ist ganz gut. 🙂",
+  "Super! Der Film gefällt dir! 😃",
+  "Wow! Du findest den Film fantastisch! 🤩"
+];
+const klickBox = $("#klick-sterne");
+function sterneMalenKlick(n) { $$("button", klickBox).forEach((b, i) => { b.classList.toggle("an", i < n); b.setAttribute("aria-checked", i < n); }); }
+for (let i = 1; i <= 5; i++) {
+  const b = neu("button", null, "★");
+  b.setAttribute("role", "radio"); b.setAttribute("aria-label", `${i} ${i === 1 ? "Stern" : "Sterne"}`);
+  b.addEventListener("mouseenter", () => sterneMalenKlick(i));
+  b.addEventListener("mouseleave", () => sterneMalenKlick(+klickBox.dataset.wert || 0));
+  b.addEventListener("click", () => {
+    klickBox.dataset.wert = i; sterneMalenKlick(i);
+    const vergleich = i > UNSERE_STERNE ? "Du gibst mehr Sterne als wir!" : "Du gibst weniger Sterne als wir.";
+    $("#bewertung-nachricht").textContent = `${NACHRICHTEN[i - 1]} ${vergleich} (Wir geben 3,6 Sterne.)`;
+    if (i === 5) konfetti();
+  });
+  klickBox.appendChild(b);
+}
+
+/* ---------- Confeti ---------- */
+function konfetti() {
+  if (reduziert) return;
+  const c = $("#konfetti"), ctx = c.getContext("2d");
+  c.width = innerWidth; c.height = innerHeight;
+  const farben = ["#e6a93a", "#d6453d", "#2f9e90", "#f7f0e1", "#5a6fb5"];
+  const teile = Array.from({ length: 160 }, () => ({
+    x: Math.random() * c.width, y: -20 - Math.random() * c.height * 0.5,
+    vx: (Math.random() - 0.5) * 4, vy: 2 + Math.random() * 4,
+    r: Math.random() * 6.28, vr: (Math.random() - 0.5) * 0.3,
+    g: 6 + Math.random() * 6, f: farben[Math.floor(Math.random() * farben.length)]
+  }));
+  const ende = performance.now() + 3500;
+  (function malen(t) {
+    ctx.clearRect(0, 0, c.width, c.height);
+    teile.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.r += p.vr; p.vy += 0.04;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.f; ctx.fillRect(-p.g / 2, -p.g / 4, p.g, p.g / 2); ctx.restore();
+    });
+    if (t < ende) requestAnimationFrame(malen); else ctx.clearRect(0, 0, c.width, c.height);
+  })(performance.now());
+}
+
+/* ---------- Vocabulario: tocar para ver la traducción ---------- */
+document.addEventListener("click", e => {
+  const v = e.target.closest(".vokabel");
+  $$(".vokabel.zeigen").forEach(x => { if (x !== v) x.classList.remove("zeigen"); });
+  if (v) v.classList.toggle("zeigen");
+});
+
+/* ---------- Salto temporal y volver al inicio ---------- */
+$("#zeitsprung").addEventListener("click", () => {
+  const aktiv = $(".zeitnav a.aktiv");
+  const moeglich = stationen.filter(s => !aktiv || aktiv.getAttribute("href") !== "#" + s.id);
+  const ziel = moeglich[Math.floor(Math.random() * moeglich.length)];
+  warpEffekt();
+  setTimeout(() => ziel.scrollIntoView({ behavior: "smooth" }), 300);
+});
+$("#zurueck-btn").addEventListener("click", () => {
+  warpEffekt();
+  setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 300);
+});
+</script>
+</body>
+</html>
